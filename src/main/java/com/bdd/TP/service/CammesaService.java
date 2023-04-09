@@ -5,10 +5,8 @@ import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 import java.time.LocalDate;
-import java.util.Objects;
 
 @Service
 public class CammesaService {
@@ -35,5 +33,10 @@ public class CammesaService {
 
         return newDate;
     }
+    public List actualizarRegiones(){
+        return restTemplateBuilder
+                .build()
+                .getForObject("https://api.cammesa.com/demanda-svc/demanda/RegionesDemanda", List.class);
 
+    }
 }
