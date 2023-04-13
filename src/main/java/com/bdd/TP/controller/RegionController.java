@@ -1,6 +1,5 @@
 package com.bdd.TP.controller;
 
-import com.bdd.TP.dao.Region;
 import com.bdd.TP.dto.RegionDTO;
 import com.bdd.TP.service.CammesaService;
 import com.bdd.TP.service.RegionService;
@@ -24,14 +23,25 @@ public class RegionController {
 //        return regionService.createRegion(regionDTO);
 //    }
 
+
+
+
+
     @PostMapping("/cammesa/actualizarRegiones")
-    public boolean actualizarRegiones() {
+    public List actualizarRegiones() {
         List<HashMap<String, ?>> todasLasRegiones = cammesaService.actualizarRegiones();
         for (int i = 0; i < todasLasRegiones.size(); i++) {
             regionService.createRegion(new RegionDTO((Integer) (todasLasRegiones.get(i)).get("id"),
                     (String) ((todasLasRegiones.get(i)).get("nombre"))));
         }
+        return todasLasRegiones;
+    }
+
+    @DeleteMapping("/cammesa/borrarRegion")
+    public boolean deleteMapping(@RequestParam(value="id_region") Integer id_region){
+        regionService.deleteRegion(regionService.getElementByIdRegion(id_region));
         return true;
     }
+
 
 }

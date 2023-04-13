@@ -5,6 +5,9 @@ import com.bdd.TP.dao.Region;
 import com.bdd.TP.repository.RegionRepository;
 import com.bdd.TP.service.CammesaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -36,6 +39,13 @@ public class HelloWordController {
     @GetMapping("/cammesa/demandaFeriadoMasCercano")
     public String demandaFeriadoMasCercano(@RequestParam(value="fecha") String fecha){
         return cammesaService.demandaFeriadoMasCercano(fecha);
+    }
+
+    @GetMapping("/health")
+//    @ResponseStatus(code = HttpStatus.OK, reason = "OK")
+    public ResponseEntity<String> cammesaSalud(){
+        return new ResponseEntity<>("200 OK", HttpStatus.OK);
+        //return "200 - OK";
     }
 
 }

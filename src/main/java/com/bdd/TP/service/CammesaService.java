@@ -1,6 +1,7 @@
 package com.bdd.TP.service;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.*;
 import java.time.LocalDate;
@@ -30,7 +31,11 @@ public class CammesaService {
 
         return newDate;
     }
-
+    public String cammesaSalud() {
+        return restTemplateBuilder
+                .build()
+                .getForObject("https://api.cammesa.com/demanda-svc/ping", String.class);
+    }
     public List actualizarRegiones() {
         return restTemplateBuilder
                 .build()
