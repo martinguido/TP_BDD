@@ -5,6 +5,8 @@ import com.bdd.TP.dto.FeriadoDTO;
 import com.bdd.TP.repository.FeriadoRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class FeriadoService {
 
@@ -18,5 +20,10 @@ public class FeriadoService {
         feriadoRepository.save(aNewFeriado);
         System.out.println(feriadoRepository.findAll().toString());
         return feriadoDTO;
+    }
+
+    public boolean loadFeriados(List<Feriado> listaFeriados){
+        feriadoRepository.saveAll(listaFeriados);
+        return true;
     }
 }

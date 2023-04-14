@@ -1,7 +1,6 @@
 package com.bdd.TP.controller;
 
 import com.bdd.TP.dao.Feriado;
-import com.bdd.TP.dto.FeriadoDTO;
 import com.bdd.TP.service.CammesaService;
 import com.bdd.TP.service.FeriadoService;
 import org.springframework.web.bind.annotation.*;
@@ -11,10 +10,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @RestController
 @RequestMapping("api/v1")
@@ -35,15 +31,20 @@ public class FeriadoController {
         Instant dayInst = localDate.atStartOfDay(ZoneId.systemDefault()).toInstant();
         Date day = Date.from(dayInst);
         String formattedNewDate = (new SimpleDateFormat("yyyy-MM-dd").parse(fecha)).toString();
+        List<Feriado> listaFeriados = new ArrayList<Feriado>();
         int i = 0;
         while (! formattedNewDate.equals(day.toString())){
             String newDatePlus = LocalDate.parse(fecha).plusDays(i).toString();
             formattedNewDate = (new SimpleDateFormat("yyyy-MM-dd").parse(newDatePlus)).toString();
             Feriado feriado = new Feriado(new SimpleDateFormat("yyyy-MM-dd").parse(newDatePlus), Boolean.parseBoolean(cammesaService.esFeriado(newDatePlus)));
             System.out.println(feriado);
-            feriadoService.createFeriado(new FeriadoDTO(feriado.getFecha(), feriado.getEsFeriado()));
+            //feriadoService.createFeriado(new FeriadoDTO(feriado.getFecha(), feriado.getEsFeriado()));
             i=i+1;
+            listaFeriados.add(feriado);
         }
+        System.out.println("********************************");
+        System.out.println(listaFeriados.toString());
+        feriadoService.loadFeriados(listaFeriados);
         return true;
     }
 
