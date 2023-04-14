@@ -12,6 +12,8 @@ services:
         ipv4_address: 192.168.55.10
     ports:
       - "8080:8080"
+    volumes:
+      - postgres-data:/etc/data
     environment:
       SPRING_APPLICATION_JSON: '{
         "spring.jpa.database": "POSTGRESQL",
@@ -56,6 +58,8 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: name@example.com
       PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - postgres-data:/etc/data
     ports:
       - 80:80
 networks:
