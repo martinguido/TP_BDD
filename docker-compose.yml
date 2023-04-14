@@ -2,16 +2,16 @@ version: '3.8'
 services:
   springboot:
     container_name: springboot
-
     image: springboot
     platform: linux/amd64
-#    build: .
-    tty: true
+    build: .
     networks:
       hfnet:
         ipv4_address: 192.168.55.10
     ports:
       - "8080:8080"
+    volumes:
+      - postgres-data:/etc/data
     environment:
       SPRING_APPLICATION_JSON: '{
         "spring.jpa.database": "POSTGRESQL",
@@ -24,16 +24,15 @@ services:
         "spring.jpa.show-sql":"true",
         "spring.jpa.generate-ddl":"true",
         "spring.jpa.hibernate.ddl-auto":"create",
-        "spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation":"true"
+        "spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation":"true",
+        "spring.jpa.properties.hibernate.jdbc.batch_size":"100",
+        "spring.jpa.properties.hibernate.order_inserts":"true",
+        "spring.jpa.properties.hibernate.generate_statistics":"true",
             }'
   postgres:
     container_name: postgres
     image: postgres
     restart: always
-#    networks:
-#      customnetwork:
-#        ipv4_address: 172.199.0.10
-    tty: true
     networks:
       hfnet:
         ipv4_address: 192.168.55.11
@@ -49,13 +48,14 @@ services:
     container_name: pgadmin
     image: dpage/pgadmin4
     restart: always
-    tty: true
     networks:
       hfnet:
         ipv4_address: 192.168.55.12
     environment:
       PGADMIN_DEFAULT_EMAIL: name@example.com
       PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - postgres-data:/etc/data
     ports:
       - 80:80
 networks:
