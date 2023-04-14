@@ -1,7 +1,6 @@
 package com.bdd.TP.service;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.*;
 import java.time.LocalDate;
