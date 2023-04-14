@@ -43,6 +43,8 @@ services:
       POSTGRES_DB: postgres
     ports:
       - 5432:5432
+    volumes:
+      - postgres-data:/etc/data
   pgadmin:
     container_name: pgadmin
     image: dpage/pgadmin4
@@ -63,3 +65,6 @@ networks:
       config:
         - subnet: 192.168.55.0/24
           gateway: 192.168.55.1
+volumes:
+  postgres-data:
+    name: "postgres-data"
