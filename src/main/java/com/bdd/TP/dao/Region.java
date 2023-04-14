@@ -12,16 +12,16 @@ public class Region {
 //    private Long id;
     @Id
     @Column(name="ID_REGION")
-    private Integer id_region;
+    private Integer idRegion;
     @Column(name="NOMBRE_REGION")
     private String nombre;
 
-    public Integer getId_region() {
-        return id_region;
+    public Integer getIdRegion() {
+        return idRegion;
     }
 
-    public void setId_region(Integer id_region) {
-        this.id_region = id_region;
+    public void setIdRegion(Integer id_region) {
+        this.idRegion = id_region;
     }
 
     public String getNombre() {
@@ -34,8 +34,8 @@ public class Region {
     public Region() {
 
     }
-    public Region(Integer id_region, String nombre) {
-        this.id_region = id_region;
+    public Region(Integer idRegion, String nombre) {
+        this.idRegion = idRegion;
         this.nombre = nombre;
     }
 
@@ -44,18 +44,18 @@ public class Region {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Region region = (Region) o;
-        return Objects.equals(id_region, region.id_region) && Objects.equals(nombre, region.nombre);
+        return Objects.equals(idRegion, region.idRegion) && Objects.equals(nombre, region.nombre);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id_region);
+        return Objects.hash(idRegion);
     }
 
     @Override
     public String toString() {
         return "Region{" +
-                "id_region=" + id_region +
+                "id_region=" + idRegion +
                 ", nombre='" + nombre + '\'' +
                 '}';
     }

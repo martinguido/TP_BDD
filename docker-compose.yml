@@ -1,0 +1,70 @@
+version: '3.8'
+services:
+  springboot:
+    container_name: springboot
+
+    image: springboot
+    platform: linux/amd64
+#    build: .
+    tty: true
+    networks:
+      hfnet:
+        ipv4_address: 192.168.55.10
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_APPLICATION_JSON: '{
+        "spring.jpa.database": "POSTGRESQL",
+        "spring.sql.init.platform":"postgres",
+        "spring.datasource.driver-class-name":"org.postgresql.Driver",
+        "spring.jpa.properties.hibernate.dialect":"org.hibernate.dialect.PostgreSQLDialect",
+        "spring.datasource.url":"jdbc:postgresql://192.168.55.11:5432/postgres",
+        "spring.datasource.username":"postgres",
+        "spring.datasource.password":"postgres",
+        "spring.jpa.show-sql":"true",
+        "spring.jpa.generate-ddl":"true",
+        "spring.jpa.hibernate.ddl-auto":"create",
+        "spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation":"true"
+            }'
+  postgres:
+    container_name: postgres
+    image: postgres
+    restart: always
+#    networks:
+#      customnetwork:
+#        ipv4_address: 172.199.0.10
+    tty: true
+    networks:
+      hfnet:
+        ipv4_address: 192.168.55.11
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres-data:/etc/data
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    restart: always
+    tty: true
+    networks:
+      hfnet:
+        ipv4_address: 192.168.55.12
+    environment:
+      PGADMIN_DEFAULT_EMAIL: name@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - 80:80
+networks:
+  hfnet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.55.0/24
+          gateway: 192.168.55.1
+volumes:
+  postgres-data:
+    name: "postgres-data"

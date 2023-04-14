@@ -16,7 +16,14 @@ public class RegionService {
     public RegionDTO createRegion(RegionDTO regionDTO){
         Region aNewRegion = new Region(regionDTO.getId_region(), regionDTO.getNombre());
         regionRepository.save(aNewRegion);
-        System.out.println(regionRepository.findAll().toString());
+//        System.out.println(regionRepository.findAll().toString());
         return regionDTO;
+    }
+    public void deleteRegion(Region region){
+        regionRepository.delete(region);
+    }
+
+    public Region getElementByIdRegion(Integer id_region){
+        return  regionRepository.getByIdRegion(id_region);
     }
 }
