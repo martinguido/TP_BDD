@@ -2,11 +2,13 @@ package com.bdd.TP.dto;
 import lombok.Data;
 @Data
 public class RegionDTO {
-    private Integer id_region;
+    public Long id;
+    private Integer idRegion;
     private String nombre;
 
-    public RegionDTO(Integer id_region, String nombre) {
-        this.id_region = id_region;
+    public RegionDTO(Long id, Integer idRegion, String nombre) {
+        this.id = id;
+        this.idRegion = idRegion;
         this.nombre = nombre;
     }
 }

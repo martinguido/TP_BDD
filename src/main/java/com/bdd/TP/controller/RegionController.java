@@ -1,5 +1,6 @@
 package com.bdd.TP.controller;
 
+import com.bdd.TP.dao.Region;
 import com.bdd.TP.dto.RegionDTO;
 import com.bdd.TP.service.CammesaService;
 import com.bdd.TP.service.RegionService;
@@ -23,23 +24,30 @@ public class RegionController {
 //        return regionService.createRegion(regionDTO);
 //    }
 
-
+//    @PostMapping("/cammesa/actualizarRegiones2")
+//    public List actualizarRegiones2() {
+//        List<HashMap<String, ?>> todasLasRegiones = cammesaService.actualizarRegiones2();
+//        for (int i = 0; i < todasLasRegiones.size(); i++) {
+//            regionService.createRegion(new RegionDTO((Integer) (todasLasRegiones.get(i)).get("id"),
+//                    (String) ((todasLasRegiones.get(i)).get("nombre"))));
+//        }
+//        return todasLasRegiones;
+//    }
 
 
 
     @PostMapping("/cammesa/actualizarRegiones")
     public List actualizarRegiones() {
-        List<HashMap<String, ?>> todasLasRegiones = cammesaService.actualizarRegiones();
-        for (int i = 0; i < todasLasRegiones.size(); i++) {
-            regionService.createRegion(new RegionDTO((Integer) (todasLasRegiones.get(i)).get("id"),
-                    (String) ((todasLasRegiones.get(i)).get("nombre"))));
-        }
+        List<Region> todasLasRegiones = cammesaService.actualizarRegiones();
+        regionService.saveRegiones(todasLasRegiones);
+        System.out.println("TODAS LAS REGIONES");
+        System.out.println(todasLasRegiones);
         return todasLasRegiones;
     }
 
     @DeleteMapping("/cammesa/borrarRegion")
-    public boolean deleteMapping(@RequestParam(value="id_region") Integer id_region){
-        regionService.deleteRegion(regionService.getElementByIdRegion(id_region));
+    public boolean deleteMapping(@RequestParam(value="id_region") Integer idRge){
+        regionService.deleteRegion(regionService.getElementByIdRge(idRge));
         return true;
     }
 

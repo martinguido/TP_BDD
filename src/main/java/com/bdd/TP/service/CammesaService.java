@@ -1,5 +1,6 @@
 package com.bdd.TP.service;
 
+import com.bdd.TP.dao.Region;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import java.util.*;
@@ -35,10 +36,17 @@ public class CammesaService {
                 .build()
                 .getForObject("https://api.cammesa.com/demanda-svc/ping", String.class);
     }
-    public List actualizarRegiones() {
-        return restTemplateBuilder
+//    public List actualizarRegiones2() {
+//        return restTemplateBuilder
+//                .build()
+//                .getForObject("https://api.cammesa.com/demanda-svc/demanda/RegionesDemanda", List.class);
+//
+//    }
+    public List<Region> actualizarRegiones() {
+        List<Region> regionList = Arrays.stream(Objects.requireNonNull(restTemplateBuilder
                 .build()
-                .getForObject("https://api.cammesa.com/demanda-svc/demanda/RegionesDemanda", List.class);
+                .getForObject("https://api.cammesa.com/demanda-svc/demanda/RegionesDemanda",Region[].class))).toList();
+        return regionList;
 
     }
 }
