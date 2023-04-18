@@ -29,6 +29,7 @@ public class RegionService {
     public void deleteRegion(Region region){
         regionRepository.delete(region);
     }
+    public void deleteAllRegions(){regionRepository.deleteAllInBatch();}
 
     public Region getElementByIdRge(Integer idRge){
         return  regionRepository.getByIdRge(idRge);

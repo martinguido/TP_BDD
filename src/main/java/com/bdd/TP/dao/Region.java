@@ -17,19 +17,19 @@ public class Region {
     private Integer idElemento;
     @Column(name="ID_PADRE")
     private Integer idPadre;
-//    @Column(name="ID_RGE")
-//    private Integer idRge;
+    @Column(name="ID_RGE")
+    private Integer idRge;
     @Column(name="NOMBRE")
     private String nombre;
 
     public Region() {
     }
 
-    public Region(Integer id, Integer idElemento, Integer idPadre, String nombre) {
+    public Region(Integer id, Integer idElemento, Integer idPadre,Integer idRge, String nombre) {
         this.id = id;
         this.idElemento = idElemento;
         this.idPadre = idPadre;
-//        this.idRge = idRge;
+        this.idRge = idRge;
         this.nombre = nombre;
     }
 
@@ -65,6 +65,13 @@ public class Region {
         this.idPadre = idPadre;
     }
 
+    public Integer getIdRge() {
+        return idRge;
+    }
+
+    public void setIdRge(Integer idRge) {
+        this.idRge = idRge;
+    }
 
     public String getNombre() {
         return nombre;
@@ -74,28 +81,28 @@ public class Region {
         this.nombre = nombre;
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Region region = (Region) o;
-//        return Objects.equals(id, region.id) && Objects.equals(idElemento, region.idElemento) && Objects.equals(idPadre, region.idPadre) && Objects.equals(idRge, region.idRge) && Objects.equals(nombre, region.nombre);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(id, idElemento, idPadre, idRge, nombre);
-//    }
-//
-//    @Override
-//    public String toString() {
-//        return "Region{" +
-//                "myId=" + myId +
-//                ", id=" + id +
-//                ", idElemento=" + idElemento +
-//                ", idPadre=" + idPadre +
-//                ", idRge=" + idRge +
-//                ", nombre='" + nombre + '\'' +
-//                '}';
-//    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Region region = (Region) o;
+        return Objects.equals(id, region.id) && Objects.equals(idElemento, region.idElemento) && Objects.equals(idPadre, region.idPadre) && Objects.equals(idRge, region.idRge) && Objects.equals(nombre, region.nombre);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, idElemento, idPadre, idRge, nombre);
+    }
+
+    @Override
+    public String toString() {
+        return "Region{" +
+                "myId=" + myId +
+                ", id=" + id +
+                ", idElemento=" + idElemento +
+                ", idPadre=" + idPadre +
+                ", idRge=" + idRge +
+                ", nombre='" + nombre + '\'' +
+                '}';
+    }
 }

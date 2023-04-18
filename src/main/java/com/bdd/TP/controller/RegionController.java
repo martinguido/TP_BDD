@@ -1,11 +1,14 @@
 package com.bdd.TP.controller;
 
 import com.bdd.TP.dao.Region;
-import com.bdd.TP.dto.RegionDTO;
 import com.bdd.TP.service.CammesaService;
 import com.bdd.TP.service.RegionService;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.HashMap;
+
 import java.util.List;
 
 @RestController
@@ -38,18 +41,25 @@ public class RegionController {
 
     @PostMapping("/cammesa/actualizarRegiones")
     public List actualizarRegiones() {
+        regionService.deleteAllRegions();
         List<Region> todasLasRegiones = cammesaService.actualizarRegiones();
         regionService.saveRegiones(todasLasRegiones);
-        System.out.println("TODAS LAS REGIONES");
-        System.out.println(todasLasRegiones);
+//        System.out.println("TODAS LAS REGIONES");
+//        System.out.println(todasLasRegiones);
         return todasLasRegiones;
     }
 
     @DeleteMapping("/cammesa/borrarRegion")
-    public boolean deleteMapping(@RequestParam(value="id_region") Integer idRge){
-        regionService.deleteRegion(regionService.getElementByIdRge(idRge));
-        return true;
+    public ResponseEntity<?> deleteMapping(@RequestParam(value="id_region") Integer idRge){
+//        regionService.deleteRegion(regionService.getElementByIdRge(idRge));
+//        return true;
+        try {
+            regionService.deleteRegion(regionService.getElementByIdRge(idRge));
+            return ResponseEntity.ok("La region con idRge: "+idRge+" ha sido eliminada correctamente.");
+        } catch (DataAccessException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La region con idRge: " + idRge + " no existe.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
-
-
 }
