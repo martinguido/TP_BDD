@@ -13,4 +13,6 @@ public interface RegionRepository extends CrudRepository<Region, Long> {
      void deleteAllInBatch();
      List<Region> findAll();
      Optional<Region> findByIdRge(Integer idRge);
+
+     Optional<Region> findById(Integer id);
 }

@@ -5,10 +5,11 @@ import java.util.Objects;
 @Entity
 @Table(name="REGIONES")
 public class Region {
-    @Id
+    /*@Id
     @Column(name="MY_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long myId;
+    private Long myId;*/
+    @Id
     @Column(name="ID")
     private Integer id;
     @Column(name="ID_ELEMENTO")
@@ -28,12 +29,12 @@ public class Region {
         this.idRge = idRge;
         this.nombre = nombre;
     }
-    public Long getMyId() {
+    /*public Long getMyId() {
         return myId;
     }
     public void setMyId(Long myId) {
         this.myId = myId;
-    }
+    }*/
     public Integer getId() {
         return id;
     }
@@ -78,7 +79,6 @@ public class Region {
     @Override
     public String toString() {
         return "Region{" +
-                "myId=" + myId +
                 ", id=" + id +
                 ", idElemento=" + idElemento +
                 ", idPadre=" + idPadre +

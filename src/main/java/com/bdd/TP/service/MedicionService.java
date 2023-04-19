@@ -26,8 +26,8 @@ public class MedicionService {
     public List<Medicion> findByFechaAndRegion(Date date, Optional<Region> region){return medicionRepository.findByFechaAndRegion(date,region);}
     public MedicionDTO createMedicion(MedicionDTO medicionDTO) {
         Region region = medicionDTO.getRegion();
-        Integer idRge = region.getIdRge();
-        Region savedRegion = regionRepository.findByIdRge(idRge)
+        Integer idRge = region.getId();
+        Region savedRegion = regionRepository.findById(idRge)
                 .orElseThrow(
                         ()-> new RegionDoesNotExistException("The region with id: " + idRge + " does not exists")
                 );

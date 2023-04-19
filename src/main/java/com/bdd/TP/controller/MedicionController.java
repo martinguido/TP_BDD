@@ -45,6 +45,7 @@ public class MedicionController {
     public void actualizarMediciones() throws ParseException {
         List<Region> regiones = regionService.findAll();
 //        Date newDate = new SimpleDateFormat("yyyy-MM-dd").parse("2023-04-01");
+        System.out.println(regiones);
         LocalDate today = LocalDate.now();
         for (int i=0; i<regiones.size(); i++){
             int j = 2;
@@ -53,13 +54,13 @@ public class MedicionController {
                 Date date = Date.from((today.minusDays(j)).atStartOfDay(zoneId).toInstant());
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 String formattedDate = today.minusDays(j).format(formatter);
-//                System.out.println(formattedDate + regiones.get(i).getIdRge());
-                List<HashMap<?, ?>> mediciones  = cammesaService.demandaYTempertauraRegionPorFecha(formattedDate, (regiones.get(i)).getIdRge());
-                HashMap<String, Double> medicion =  medicionService.sumarDemandayTemperaturaTotal(mediciones,formattedDate, (regiones.get(i)).getIdRge());
+                System.out.println("----> "+formattedDate + regiones.get(i).getId());
+                List<HashMap<?, ?>> mediciones  = cammesaService.demandaYTempertauraRegionPorFecha(formattedDate, (regiones.get(i)).getId());
+                HashMap<String, Double> medicion =  medicionService.sumarDemandayTemperaturaTotal(mediciones,formattedDate, (regiones.get(i)).getId());
                 medicionService.createMedicion(new MedicionDTO(date, regiones.get(i), medicion.get("demanda"), medicion.get("temperatura")));
                 j--;
             }
-            i++;
+            //i++;
         }
     }
 }

@@ -9,7 +9,7 @@ import java.util.Objects;
 @Table(name="MEDICIONES")
 public class Medicion {
     @Id
-    @Column(name="ID")
+    @Column(name="MY_ID")
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     @Column(name="DEMANDA")
@@ -19,7 +19,7 @@ public class Medicion {
     @Column(name="FECHA")
     private Date fecha;
     @ManyToOne(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
-    @JoinColumn(name="ID_REGION")
+    @JoinColumn(name="ID")
     private Region region;
     public Double getTemperatura() {
         return temperatura;
