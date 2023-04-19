@@ -9,18 +9,14 @@ import java.time.LocalDate;
 @Service
 public class CammesaService {
     private RestTemplateBuilder restTemplateBuilder;
-    // es una clase que te permite hacer requests a servicios
-
     CammesaService(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplateBuilder = restTemplateBuilder;
     }
-
     public String esFeriado(String fecha) {
         return restTemplateBuilder
                 .build()
                 .getForObject("https://api.cammesa.com/demanda-svc/demanda/EsDiaFeriado?fecha=" + fecha, String.class);
     }
-
     public String demandaFeriadoMasCercano(String newDate) {
         int i = 1;
         // String newDate = date;
@@ -28,7 +24,6 @@ public class CammesaService {
             newDate = LocalDate.parse(newDate).plusDays(i).toString();
             i = i + 1;
         }
-
         return newDate;
     }
     public String cammesaSalud() {
@@ -47,6 +42,13 @@ public class CammesaService {
                 .build()
                 .getForObject("https://api.cammesa.com/demanda-svc/demanda/RegionesDemanda",Region[].class))).toList();
         return regionList;
+
+    }
+    public List demandaYTempertauraRegionPorFecha(String fecha, Integer id_region) {
+        return restTemplateBuilder
+                .build()
+                .getForObject("https://api.cammesa.com/demanda-svc/demanda/ObtieneDemandaYTemperaturaRegionByFecha?fecha="
+                        + fecha + "&id_region=" + id_region, List.class);
 
     }
 }

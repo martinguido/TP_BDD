@@ -16,19 +16,15 @@ public class Feriado {
     private Date fecha;
     @Column(name="ESFERIADO")
     private boolean esFeriado;
-
     public Date getFecha() {
         return fecha;
     }
-
     public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
-
     public boolean getEsFeriado() {
         return esFeriado;
     }
-
     public void setEsFeriado(boolean esFeriado) {
         this.esFeriado = esFeriado;
     }
@@ -39,7 +35,6 @@ public class Feriado {
         this.fecha = fecha;
         this.esFeriado = esFeriado;
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -47,12 +42,10 @@ public class Feriado {
         Feriado feriado = (Feriado) o;
         return Objects.equals(fecha, feriado.fecha) && Objects.equals(esFeriado, feriado.esFeriado);
     }
-
     @Override
     public int hashCode() {
         return Objects.hash(fecha);
     }
-
     @Override
     public String toString() {
         return "Feriado{" +
