@@ -1,8 +1,10 @@
 package com.bdd.TP.controller;
 
 import com.bdd.TP.dao.Feriado;
+import com.bdd.TP.dao.Medicion;
 import com.bdd.TP.service.CammesaService;
 import com.bdd.TP.service.FeriadoService;
+import com.bdd.TP.service.MedicionService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,10 +20,24 @@ import java.util.*;
 public class FeriadoController {
     private final CammesaService cammesaService;
     private final FeriadoService feriadoService;
+    private final MedicionService medicionService;
 
-    public FeriadoController(CammesaService cammesaService, FeriadoService feriadoService) {
+    public FeriadoController(CammesaService cammesaService, FeriadoService feriadoService, MedicionService medicionService) {
         this.cammesaService = cammesaService;
         this.feriadoService = feriadoService;
+        this.medicionService = medicionService;
+    }
+
+    @GetMapping("/cammesa/demandaFeriado")
+    public void demandaFeriado(@RequestParam(value="fecha") String fecha) throws ParseException {
+        Date fechaFormatoDate = new SimpleDateFormat("yyyy-MM-dd").parse(fecha);
+        Feriado primerFeriadoEncontrado = feriadoService.feriadoCercano(fechaFormatoDate);
+        Date fechaHardcodeada = new SimpleDateFormat("yyyy-MM-dd").parse("2023-04-20");
+        double avgDemanda = medicionService.avgDemandaFechaEspecifica(fechaHardcodeada);
+        System.out.println(fechaHardcodeada);
+        System.out.println("AVG DEMANDA: "+avgDemanda);
+        //List<Medicion> medicionesDeLaFecha = medicionService.findByFecha(fechaHardcodeada);
+        //System.out.println("MEDICIONES DE LA FECHA: "+medicionesDeLaFecha);
     }
 //    @PostConstruct
     @PostMapping("/cammesa/actualizarFeriados")
