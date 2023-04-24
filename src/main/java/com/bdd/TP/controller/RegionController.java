@@ -1,10 +1,13 @@
 package com.bdd.TP.controller;
 
-import com.bdd.TP.dto.RegionDTO;
+import com.bdd.TP.dao.Region;
 import com.bdd.TP.service.CammesaService;
 import com.bdd.TP.service.RegionService;
+import jakarta.annotation.PostConstruct;
+import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -12,7 +15,6 @@ import java.util.List;
 public class RegionController {
     private final CammesaService cammesaService;
     private final RegionService regionService;
-
     public RegionController(CammesaService cammesaService, RegionService regionService) {
         this.cammesaService = cammesaService;
         this.regionService = regionService;
@@ -23,25 +25,34 @@ public class RegionController {
 //        return regionService.createRegion(regionDTO);
 //    }
 
-
-
-
-
+//    @PostMapping("/cammesa/actualizarRegiones2")
+//    public List actualizarRegiones2() {
+//        List<HashMap<String, ?>> todasLasRegiones = cammesaService.actualizarRegiones2();
+//        for (int i = 0; i < todasLasRegiones.size(); i++) {
+//            regionService.createRegion(new RegionDTO((Integer) (todasLasRegiones.get(i)).get("id"),
+//                    (String) ((todasLasRegiones.get(i)).get("nombre"))));
+//        }
+//        return todasLasRegiones;
+//    }
+//    @PostConstruct
     @PostMapping("/cammesa/actualizarRegiones")
     public List actualizarRegiones() {
-        List<HashMap<String, ?>> todasLasRegiones = cammesaService.actualizarRegiones();
-        for (int i = 0; i < todasLasRegiones.size(); i++) {
-            regionService.createRegion(new RegionDTO((Integer) (todasLasRegiones.get(i)).get("id"),
-                    (String) ((todasLasRegiones.get(i)).get("nombre"))));
-        }
+        regionService.deleteAllRegions();
+        List<Region> todasLasRegiones = cammesaService.actualizarRegiones();
+        regionService.saveRegiones(todasLasRegiones);
         return todasLasRegiones;
     }
-
     @DeleteMapping("/cammesa/borrarRegion")
-    public boolean deleteMapping(@RequestParam(value="id_region") Integer id_region){
-        regionService.deleteRegion(regionService.getElementByIdRegion(id_region));
-        return true;
+    public ResponseEntity<?> deleteMapping(@RequestParam(value="id_region") Integer idRge){
+//        regionService.deleteRegion(regionService.getElementByIdRge(idRge));
+//        return true;
+        try {
+            regionService.deleteRegion(regionService.getByIdRge(idRge));
+            return ResponseEntity.ok("La region con idRge: "+idRge+" ha sido eliminada correctamente.");
+        } catch (DataAccessException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La region con idRge: " + idRge + " no existe.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
-
-
 }

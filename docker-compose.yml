@@ -27,7 +27,8 @@ services:
         "spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation":"true",
         "spring.jpa.properties.hibernate.jdbc.batch_size":"100",
         "spring.jpa.properties.hibernate.order_inserts":"true",
-        "spring.jpa.properties.hibernate.generate_statistics":"true",
+        "spring.jpa.properties.hibernate.generate_statistics":"true"
+
             }'
   postgres:
     container_name: postgres
