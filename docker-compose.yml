@@ -4,6 +4,7 @@ services:
     container_name: springboot
     image: springboot
     platform: linux/amd64
+    build: .
     networks:
       hfnet:
         ipv4_address: 192.168.55.10

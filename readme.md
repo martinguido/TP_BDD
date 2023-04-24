@@ -46,4 +46,3 @@ De esta forma, se configura por unica vez el proyecto, en un futuro solo se requ
 - En la segunda pestaña, Connection, ingresar en Host name/address: "192.168.55.11", en Username: "postgres" y en Password: "postgres"
 
 De esta forma, se configura por unica vez el proyecto, en un futuro solo se requiere entrar a Docker Desktop y correr el paquete de contenedor denominado __tp_bdd__
-Footer
