@@ -56,4 +56,11 @@ public class MedicionService {
         medicionTotal.put("temperatura", temperatura);
         return medicionTotal;
     }
+
+    public List<Medicion> findByFecha(Date fecha){ return medicionRepository.findByFecha(fecha);}
+
+    public double avgDemandaFechaEspecifica(Date fecha){
+        double demandaEsteDia = medicionRepository.findSomeDateAvgDemand(fecha);
+        return  demandaEsteDia;
+    }
 }
