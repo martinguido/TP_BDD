@@ -3,7 +3,6 @@ package com.bdd.TP.controller;
 import com.bdd.TP.dao.Region;
 import com.bdd.TP.service.CammesaService;
 import com.bdd.TP.service.RegionService;
-import jakarta.annotation.PostConstruct;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,4 +54,5 @@ public class RegionController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
 }

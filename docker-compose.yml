@@ -24,15 +24,10 @@ services:
         "spring.jpa.generate-ddl":"true",
         "spring.jpa.hibernate.ddl-auto":"create",
         "spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation":"true",
-        "spring.jpa.properties.hibernate.jdbc.batch_size":"100",
         "spring.jpa.properties.hibernate.order_inserts":"true",
-        "spring.jpa.properties.hibernate.generate_statistics":"true",
+        "spring.jpa.properties.hibernate.generate_statistics":"false",
         "spring.batch.initialize-schema":"always",
-        "db.host":"192.168.55.11",
-        "db.user":"postgres",
-        "db.password":"postgres",
-        "db.port":"5432",
-        "db.name":"postgres"
+        "spring.datasource.hikari.metrics.enabled":"false"
             }'
   postgres:
     container_name: postgres

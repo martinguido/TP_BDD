@@ -1,7 +1,8 @@
 # syntax=docker/dockerfile:1
 
 #FROM openjdk:17-oracle
-FROM openjdk:19-jdk-alpine
+#FROM openjdk:19-jdk-alpine
+FROM openjdk:20
 VOLUME /tmp
 WORKDIR /app
 
