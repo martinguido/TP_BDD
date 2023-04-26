@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface RegionRepository extends CrudRepository<Region, Long> {
+public interface RegionRepository extends CrudRepository<Region, Integer> {
      Region getByIdRge(Integer id);
      void deleteAllInBatch();
      List<Region> findAll();
      Optional<Region> findByIdRge(Integer idRge);
 
-     Optional<Region> findById(Integer id);
+     Optional<Region> findById(Long id);
 }

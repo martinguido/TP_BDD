@@ -23,7 +23,7 @@ public class RegionService {
 //        regionRepository.saveAll(allRegions);
 //        return allRegions;
 //    }
-    public Optional<Region> findById(Long id){return regionRepository.findById(id);}
+    public Optional<Region> findById(Integer id){return regionRepository.findById(id);}
     public List<Region> findAll(){return regionRepository.findAll(); }
     public void deleteRegion(Region region){
         regionRepository.delete(region);

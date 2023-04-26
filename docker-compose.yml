@@ -15,8 +15,8 @@ services:
       SPRING_APPLICATION_JSON: '{
         "spring.jpa.database": "POSTGRESQL",
         "spring.sql.init.platform":"postgres",
-        "spring.datasource.driver-class-name":"org.postgresql.Driver",
         "spring.jpa.properties.hibernate.dialect":"org.hibernate.dialect.PostgreSQLDialect",
+        "spring.datasource.driver-class-name":"org.postgresql.Driver",
         "spring.datasource.url":"jdbc:postgresql://192.168.55.11:5432/postgres",
         "spring.datasource.username":"postgres",
         "spring.datasource.password":"postgres",
@@ -26,8 +26,13 @@ services:
         "spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation":"true",
         "spring.jpa.properties.hibernate.jdbc.batch_size":"100",
         "spring.jpa.properties.hibernate.order_inserts":"true",
-        "spring.jpa.properties.hibernate.generate_statistics":"true"
-
+        "spring.jpa.properties.hibernate.generate_statistics":"true",
+        "spring.batch.initialize-schema":"always",
+        "db.host":"192.168.55.11",
+        "db.user":"postgres",
+        "db.password":"postgres",
+        "db.port":"5432",
+        "db.name":"postgres"
             }'
   postgres:
     container_name: postgres

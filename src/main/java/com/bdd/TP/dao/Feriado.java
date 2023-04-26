@@ -1,7 +1,6 @@
 package com.bdd.TP.dao;
 
 import jakarta.persistence.*;
-
 import java.util.Date;
 import java.util.Objects;
 @Entity
