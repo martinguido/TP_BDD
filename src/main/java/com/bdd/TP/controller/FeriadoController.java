@@ -1,13 +1,10 @@
 package com.bdd.TP.controller;
 
 import com.bdd.TP.dao.Feriado;
-import com.bdd.TP.dao.Medicion;
 import com.bdd.TP.service.CammesaService;
 import com.bdd.TP.service.FeriadoService;
 import com.bdd.TP.service.MedicionService;
-import jakarta.annotation.PostConstruct;
 import org.springframework.web.bind.annotation.*;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -39,7 +36,7 @@ public class FeriadoController {
         //List<Medicion> medicionesDeLaFecha = medicionService.findByFecha(fechaHardcodeada);
         //System.out.println("MEDICIONES DE LA FECHA: "+medicionesDeLaFecha);
     }
-//    @PostConstruct
+    //    @PostConstruct
     @PostMapping("/cammesa/actualizarFeriados")
     public void actualizarFeriados(@RequestParam(value="fecha") String fecha) throws ParseException {
         Date date = new Date();
@@ -59,6 +56,7 @@ public class FeriadoController {
             i++;
             listaFeriados.add(feriado);
         }
+
 //        System.out.println("********************************");
 //        System.out.println(listaFeriados.toString());
         feriadoService.loadFeriados(listaFeriados);

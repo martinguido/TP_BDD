@@ -1,7 +1,7 @@
 package com.bdd.TP.dao;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-
 import java.util.Date;
 import java.util.Objects;
 
@@ -20,6 +20,7 @@ public class Medicion {
     private Date fecha;
     @ManyToOne(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
     @JoinColumn(name="ID")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Region region;
     public Double getTemperatura() {
         return temperatura;
@@ -65,5 +66,14 @@ public class Medicion {
     @Override
     public int hashCode() {
         return Objects.hash(demanda, temperatura, fecha, region);
+    }
+
+    @Override
+    public  String toString() {
+        return "Medicion{" +
+                "id='" + id + '\'' +
+                ", demanda=" + demanda +
+                ", fecha=" + fecha +
+                '}';
     }
 }
