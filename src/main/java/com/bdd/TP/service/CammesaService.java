@@ -1,5 +1,6 @@
 package com.bdd.TP.service;
 
+import com.bdd.TP.dao.Medicion;
 import com.bdd.TP.dao.Region;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
@@ -42,13 +43,13 @@ public class CammesaService {
                 .build()
                 .getForObject("https://api.cammesa.com/demanda-svc/demanda/RegionesDemanda",Region[].class))).toList();
         return regionList;
-
     }
-    public List demandaYTempertauraRegionPorFecha(String fecha, Integer id_region) {
-        return restTemplateBuilder
+    public List<Medicion> demandaYTempertauraRegionPorFecha(String fecha, Integer id_region) {
+        List<Medicion> medicionList = Arrays.stream(Objects.requireNonNull(restTemplateBuilder
                 .build()
                 .getForObject("https://api.cammesa.com/demanda-svc/demanda/ObtieneDemandaYTemperaturaRegionByFecha?fecha="
-                        + fecha + "&id_region=" + id_region, List.class);
+                        + fecha + "&id_region=" + id_region,Medicion[].class))).toList();
+        return medicionList;
 
     }
 }

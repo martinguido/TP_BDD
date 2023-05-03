@@ -7,7 +7,6 @@ import com.bdd.TP.exceptions.RegionDoesNotExistException;
 import com.bdd.TP.repository.MedicionRepository;
 import com.bdd.TP.repository.RegionRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -37,7 +36,7 @@ public class MedicionService {
         return medicionDTO;
     }
 
-    public HashMap<String, Double> sumarDemandayTemperaturaTotal(List<HashMap<?,?>> mediciones,String fecha, Integer idRge)
+    public HashMap<String, Double> sumarDemandayTemperaturaTotal(List<Medicion> mediciones, String fecha, Integer idRge)
     {
 //        List<HashMap<?, ?>> mediciones = cammesaService.demandaYTempertauraRegionPorFecha(fecha, idRge);
         HashMap<String , Double> medicionTotal= new HashMap<String, Double>();

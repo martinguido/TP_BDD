@@ -52,7 +52,7 @@ public class MedicionController {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 String formattedDate = today.minusDays(j).format(formatter);
 //                System.out.println("----> "+formattedDate + regiones.get(i).getId());
-                List<HashMap<?, ?>> mediciones  = cammesaService.demandaYTempertauraRegionPorFecha(formattedDate, (regiones.get(i)).getId());
+                List<Medicion> mediciones  = cammesaService.demandaYTempertauraRegionPorFecha(formattedDate, (regiones.get(i)).getId());
                 HashMap<String, Double> medicion =  medicionService.sumarDemandayTemperaturaTotal(mediciones,formattedDate, (regiones.get(i)).getId());
                 medicionService.createMedicion(new MedicionDTO(date, regiones.get(i), medicion.get("demanda"), medicion.get("temperatura")));
                 j--;

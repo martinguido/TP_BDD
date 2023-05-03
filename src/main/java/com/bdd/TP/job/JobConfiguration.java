@@ -2,6 +2,8 @@ package com.bdd.TP.job;
 
 //public class JobConfiguration {
 //}
+import com.bdd.TP.service.CammesaService;
+import com.bdd.TP.step.DownloadDataToCSV;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -13,24 +15,26 @@ import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilde
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import com.bdd.TP.dao.Region;
 import  com.bdd.TP.listener.JobCompletionNotificationListener;
 import  com.bdd.TP.processor.RegionItemProcessor;
-import  com.bdd.TP.step.MailSenderTasklet;
-import  com.bdd.TP.step.TruncateTableTasklet;
+
 import javax.sql.DataSource;
 
 @Configuration
 public class JobConfiguration {
-
+    @Autowired
+    public final CammesaService cammesaService;
     public final JobBuilderFactory jobBuilderFactory;
 
     public final StepBuilderFactory stepBuilderFactory;
 
-    public JobConfiguration(JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory) {
+    public JobConfiguration(CammesaService cammesaService, JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory) {
+        this.cammesaService = cammesaService;
         this.jobBuilderFactory = jobBuilderFactory;
         this.stepBuilderFactory = stepBuilderFactory;
     }
@@ -41,15 +45,16 @@ public class JobConfiguration {
         return jobBuilderFactory
                 .get("importUserJob")
                 .incrementer(new RunIdIncrementer()).listener(listener)
-                .flow(truncateTable(null)) // primer step
+                .flow(downloadDataToCSV(null,cammesaService)) // primer step
                 .on("ALLGOOD")
                 .to(doChunk(null)) // otro step
-                .from(truncateTable(null))
-                .on("TRUNCATEFAILED")
-                .to(errorMailSender()) // otro step
-                .on("EMAILSENT")
-                .fail()
                 .end()
+                .build();
+    }
+
+    private Step downloadDataToCSV(DataSource ds, CammesaService cammesaService) {
+        return stepBuilderFactory.get("downloadDataToCSV")
+                .tasklet(new DownloadDataToCSV(ds,cammesaService))
                 .build();
     }
 
@@ -80,17 +85,6 @@ public class JobConfiguration {
                 .build();
     }
 
-    @Bean
-    public Step truncateTable(DataSource ds) {
-        return stepBuilderFactory.get("truncateTable")
-                .tasklet(new TruncateTableTasklet(ds, "TRUNCATE REGIONES"))
-                .build();
-    }
-
-    @Bean
-    public Step errorMailSender() {
-        return stepBuilderFactory.get("errorMailSender").tasklet(new MailSenderTasklet()).build();
-    }
 
     @Bean
     public Step doChunk(JdbcBatchItemWriter<Region> writer) {
