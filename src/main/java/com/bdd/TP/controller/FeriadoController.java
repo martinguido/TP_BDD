@@ -3,6 +3,7 @@ package com.bdd.TP.controller;
 import com.bdd.TP.dao.Feriado;
 import com.bdd.TP.service.CammesaService;
 import com.bdd.TP.service.FeriadoService;
+import com.bdd.TP.service.MedicionService;
 import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,12 +17,26 @@ import java.util.*;
 public class FeriadoController {
     private final CammesaService cammesaService;
     private final FeriadoService feriadoService;
+    private final MedicionService medicionService;
 
-    public FeriadoController(CammesaService cammesaService, FeriadoService feriadoService) {
+    public FeriadoController(CammesaService cammesaService, FeriadoService feriadoService, MedicionService medicionService) {
         this.cammesaService = cammesaService;
         this.feriadoService = feriadoService;
+        this.medicionService = medicionService;
     }
-//    @PostConstruct
+
+    @GetMapping("/cammesa/demandaFeriado")
+    public void demandaFeriado(@RequestParam(value="fecha") String fecha) throws ParseException {
+        Date fechaFormatoDate = new SimpleDateFormat("yyyy-MM-dd").parse(fecha);
+        Feriado primerFeriadoEncontrado = feriadoService.feriadoCercano(fechaFormatoDate);
+        Date fechaHardcodeada = new SimpleDateFormat("yyyy-MM-dd").parse("2023-04-20");
+        double avgDemanda = medicionService.avgDemandaFechaEspecifica(fechaHardcodeada);
+        System.out.println(fechaHardcodeada);
+        System.out.println("AVG DEMANDA: "+avgDemanda);
+        //List<Medicion> medicionesDeLaFecha = medicionService.findByFecha(fechaHardcodeada);
+        //System.out.println("MEDICIONES DE LA FECHA: "+medicionesDeLaFecha);
+    }
+    //    @PostConstruct
     @PostMapping("/cammesa/actualizarFeriados")
     public void actualizarFeriados(@RequestParam(value="fecha") String fecha) throws ParseException {
         Date date = new Date();
@@ -41,6 +56,7 @@ public class FeriadoController {
             i++;
             listaFeriados.add(feriado);
         }
+
 //        System.out.println("********************************");
 //        System.out.println(listaFeriados.toString());
         feriadoService.loadFeriados(listaFeriados);

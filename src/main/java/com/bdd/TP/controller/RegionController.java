@@ -24,7 +24,7 @@ public class RegionController {
 //        return regionService.createRegion(regionDTO);
 //    }
 
-//    @PostMapping("/cammesa/actualizarRegiones2")
+    //    @PostMapping("/cammesa/actualizarRegiones2")
 //    public List actualizarRegiones2() {
 //        List<HashMap<String, ?>> todasLasRegiones = cammesaService.actualizarRegiones2();
 //        for (int i = 0; i < todasLasRegiones.size(); i++) {
@@ -54,5 +54,4 @@ public class RegionController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
 }

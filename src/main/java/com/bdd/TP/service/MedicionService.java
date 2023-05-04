@@ -7,12 +7,10 @@ import com.bdd.TP.exceptions.RegionDoesNotExistException;
 import com.bdd.TP.repository.MedicionRepository;
 import com.bdd.TP.repository.RegionRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-
 
 @Service
 public class MedicionService {
@@ -23,7 +21,7 @@ public class MedicionService {
         this.regionRepository = regionRepository;
     }
     public List<Medicion> findByFechaAndRegion(Date date, Optional<Region> region){return medicionRepository.findByFechaAndRegion(date,region);}
-    public MedicionDTO createMedicion(MedicionDTO medicionDTO) {
+    public Medicion createMedicion(MedicionDTO medicionDTO) {
         Region region = medicionDTO.getRegion();
         Integer idRge = region.getId();
         Region savedRegion = regionRepository.findById(idRge)
@@ -32,13 +30,33 @@ public class MedicionService {
                 );
         medicionDTO.setRegion(savedRegion);
         Medicion aNewMedicion = new Medicion(medicionDTO.getDemanda(),medicionDTO.getTemperatura(), medicionDTO.getFecha(), medicionDTO.getRegion());
-        medicionRepository.save(aNewMedicion);
-        return medicionDTO;
+        //medicionRepository.save(aNewMedicion);
+        return aNewMedicion;
     }
 
-    public HashMap<String, Double> sumarDemandayTemperaturaTotal(List<Medicion> mediciones, String fecha, Integer idRge)
+    public HashMap<String, Double> sumarDemandayTemperaturaTotal2(List<Medicion> mediciones,String fecha, Integer idRge)
     {
-//        List<HashMap<?, ?>> mediciones = cammesaService.demandaYTempertauraRegionPorFecha(fecha, idRge);
+//
+        HashMap<String , Double> medicionTotal= new HashMap<String, Double>();
+        double demanda = 0.0;
+        double temperatura = 0.0;
+
+        for (Medicion medicion : mediciones) {
+            if (medicion.getDemanda()!= null){
+                demanda = demanda +  medicion.getDemanda();
+            }
+            demanda = demanda +  medicion.getDemanda();
+            if (medicion.getTemperatura() != null) {
+                temperatura = temperatura + (Double) medicion.getTemperatura();
+            }
+        }
+        medicionTotal.put("demanda", demanda);
+        medicionTotal.put("temperatura", temperatura);
+        return medicionTotal;
+    }
+    public HashMap<String, Double> sumarDemandayTemperaturaTotal(List<HashMap<?,?>> mediciones,String fecha, Integer idRge)
+    {
+//
         HashMap<String , Double> medicionTotal= new HashMap<String, Double>();
         double demanda = 0.0;
         double temperatura = 0.0;
@@ -55,4 +73,21 @@ public class MedicionService {
         medicionTotal.put("temperatura", temperatura);
         return medicionTotal;
     }
+    public List<Medicion> findByFecha(Date fecha){ return medicionRepository.findByFecha(fecha);}
+
+    public double avgDemandaFechaEspecifica(Date fecha){
+        double demandaEsteDia = medicionRepository.findSomeDateAvgDemand(fecha);
+        return  demandaEsteDia;
+    }
+
+    public List<Medicion> dateWithMaxDemandByRegion() {
+        return medicionRepository.dateWithMaxDemandByRegion();
+
+    }
+
+    public void saveMediciones(List<Medicion> listaMediciones) {
+        medicionRepository.saveAll(listaMediciones);
+    }
+
+    public void deleteAllMediciones(){medicionRepository.deleteAllInBatch();}
 }

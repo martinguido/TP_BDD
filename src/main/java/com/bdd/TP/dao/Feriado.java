@@ -1,12 +1,17 @@
 package com.bdd.TP.dao;
 
-import javax.persistence.*;
+
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 import java.util.Objects;
 @Entity
 @Table(name="FERIADOS")
 public class Feriado {
-//    @Id
+    //    @Id
 //    @Column(name="ID")
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
 //    private Long id;
@@ -15,9 +20,6 @@ public class Feriado {
     private Date fecha;
     @Column(name="ESFERIADO")
     private boolean esFeriado;
-
-
-
     public Date getFecha() {
         return fecha;
     }
@@ -31,6 +33,7 @@ public class Feriado {
         this.esFeriado = esFeriado;
     }
     public Feriado() {
+
     }
     public Feriado(Date fecha, boolean esFeriado) {
         this.fecha = fecha;

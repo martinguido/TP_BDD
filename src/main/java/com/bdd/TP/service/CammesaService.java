@@ -32,7 +32,7 @@ public class CammesaService {
                 .build()
                 .getForObject("https://api.cammesa.com/demanda-svc/ping", String.class);
     }
-//    public List actualizarRegiones2() {
+    //    public List actualizarRegiones2() {
 //        return restTemplateBuilder
 //                .build()
 //                .getForObject("https://api.cammesa.com/demanda-svc/demanda/RegionesDemanda", List.class);
@@ -43,13 +43,23 @@ public class CammesaService {
                 .build()
                 .getForObject("https://api.cammesa.com/demanda-svc/demanda/RegionesDemanda",Region[].class))).toList();
         return regionList;
+
     }
-    public List<Medicion> demandaYTempertauraRegionPorFecha(String fecha, Integer id_region) {
-        List<Medicion> medicionList = Arrays.stream(Objects.requireNonNull(restTemplateBuilder
+    public List<Medicion> demandaYTempertauraRegionPorFecha2(String fecha, Integer id_region) {
+            List<Medicion> medicionList = Arrays.stream(Objects.requireNonNull(restTemplateBuilder
                 .build()
                 .getForObject("https://api.cammesa.com/demanda-svc/demanda/ObtieneDemandaYTemperaturaRegionByFecha?fecha="
-                        + fecha + "&id_region=" + id_region,Medicion[].class))).toList();
-        return medicionList;
+                        + fecha + "&id_region=" + id_region, Medicion[].class))).toList();
+            return medicionList;
+
+    }
+
+
+    public List demandaYTempertauraRegionPorFecha(String fecha, Integer id_region) {
+        return restTemplateBuilder
+                .build()
+                .getForObject("https://api.cammesa.com/demanda-svc/demanda/ObtieneDemandaYTemperaturaRegionByFecha?fecha="
+                        + fecha + "&id_region=" + id_region, List.class);
 
     }
 }
