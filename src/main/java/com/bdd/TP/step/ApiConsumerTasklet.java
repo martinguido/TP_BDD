@@ -38,18 +38,20 @@ public class ApiConsumerTasklet implements Tasklet, StepExecutionListener{
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws IOException {
         System.out.println("CHECKPOINT 1");
-        String strDate = new SimpleDateFormat("yyyy-MM-dd").format(startDate);
-        List<HashMap<?,?>> data = restTemplate
-                .getForObject("https://api.cammesa.com/demanda-svc/demanda/ObtieneDemandaYTemperaturaRegionByFecha?fecha=2023-04-01&id_region=418", List.class);
-        FileWriter fileWriter = new FileWriter(new File(  "/medicion.csv"));
-        if (data!=null) {
-            for (HashMap<?, ?> record : data) {
-                String csvRecord = String.format("%s, %s, %s, %s\n", "418", record.get("fecha"), record.get("dem"), record.get("temp"));
-                fileWriter.write(csvRecord);
-            }
-        }
+//        String strDate = new SimpleDateFormat("yyyy-MM-dd").format(startDate);
+//        List<HashMap<?,?>> data = restTemplate
+//                .getForObject("https://api.cammesa.com/demanda-svc/demanda/ObtieneDemandaYTemperaturaRegionByFecha?fecha=2023-04-01&id_region=418", List.class);
+//        FileWriter fileWriter = new FileWriter(new File(  "/medicion.csv"));
+//        if (data!=null) {
+//            for (HashMap<?, ?> record : data) {
+//                String csvRecord = String.format("%s, %s, %s, %s\n", "418", record.get("fecha"), record.get("dem"), record.get("temp"));
+//                fileWriter.write(csvRecord);
+//            }
+//        }
+        FileWriter fileWriter = new FileWriter(new File(  "/app/src/main/resources/medicion.csv"));
+        fileWriter.write("HOLA");
         fileWriter.close();
-        System.out.println(data);
+//        System.out.println(data);
         return RepeatStatus.FINISHED;
     }
     @Override
