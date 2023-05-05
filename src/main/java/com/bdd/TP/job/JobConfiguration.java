@@ -17,32 +17,15 @@
 //
 //@Configuration
 //public class JobConfiguration {
-//    @Autowired
-//    public final CammesaService cammesaService;
 //    public final JobBuilderFactory jobBuilderFactory;
 //
 //    public final StepBuilderFactory stepBuilderFactory;
 //
-//    public JobConfiguration(CammesaService cammesaService, JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory) {
-//        this.cammesaService = cammesaService;
+//    public JobConfiguration( JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory) {
 //        this.jobBuilderFactory = jobBuilderFactory;
 //        this.stepBuilderFactory = stepBuilderFactory;
 //    }
 //
-//    @Bean
-//    public Job dataDownloaderJob() {
-//        return jobBuilderFactory
-//                .get("downloadData")
-//                .incrementer(new RunIdIncrementer())
-//                .start(downloadDataToCSV(null,cammesaService))
-//                .build();
-//    }
-//
-//    private Step downloadDataToCSV(DataSource ds, CammesaService cammesaService) {
-//        return stepBuilderFactory.get("downloadDataToCSV")
-//                .tasklet(new DownloadDataToCSV(ds,cammesaService))
-//                .build();
-//    }
 //
 //    @Bean
 //    public FlatFileItemReader<Region> reader() {

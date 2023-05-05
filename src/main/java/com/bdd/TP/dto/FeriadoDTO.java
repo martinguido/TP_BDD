@@ -5,6 +5,10 @@ import java.util.Date;
 public class FeriadoDTO {
     private Date fecha;
     private boolean esFeriado;
+
+    public FeriadoDTO() {
+    }
+
     public FeriadoDTO(Date fecha, boolean esFeriado) {
         this.fecha = fecha;
         this.esFeriado = esFeriado;

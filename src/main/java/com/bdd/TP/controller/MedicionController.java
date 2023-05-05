@@ -1,15 +1,11 @@
 package com.bdd.TP.controller;
-import com.bdd.TP.dao.Feriado;
 import com.bdd.TP.dao.Medicion;
 import com.bdd.TP.dao.Region;
 import com.bdd.TP.dto.MedicionDTO;
 import com.bdd.TP.service.CammesaService;
 import com.bdd.TP.service.MedicionService;
 import com.bdd.TP.service.RegionService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -32,15 +28,23 @@ public class MedicionController {
 
     //    @PostConstruct
     @PostMapping("/cammesa/demandaYTemperaturaDiario")
-    public List<Medicion> actualizarDemanda(@RequestParam(value = "fecha") String fecha, @RequestParam(value = "idRge") Integer id_region) throws ParseException {
+    public String actualizarDemanda(@RequestParam(value = "fecha") String fecha, @RequestParam(value = "id_region") Integer id_region) throws ParseException {
         Date newDate = new SimpleDateFormat("yyyy-MM-dd").parse(fecha);
-        Optional<Region> region = regionService.findById(Long.valueOf(id_region));
-        return medicionService.findByFechaAndRegion(newDate, region);
+        String response = "Already exists";
+        List<HashMap<?, ?>> mediciones = cammesaService.demandaYTempertauraRegionPorFecha(fecha, id_region); //Mediciones de la fecha y region
+        HashMap<String, Double> medicion = medicionService.sumarDemandayTemperaturaTotal(mediciones); //Medicion Total de una fecha y region
+        Region region = regionService.getById(id_region);
+        if (!medicionService.existeMedicion(newDate, Optional.ofNullable(region))) {
+            Medicion newMedicion = medicionService.createMedicion(new MedicionDTO(newDate, region, medicion.get("demanda"), medicion.get("temperatura")));
+            medicionService.saveMedicion(newMedicion);
+            response = "OK";
+        }
+        return response;
     }
 
     @PostMapping("/cammesa/actualizarMediciones")
-    public List<Medicion>  actualizarMediciones(@RequestParam(value = "fecha") String fecha) throws ParseException {
-        medicionService.deleteAllMediciones();
+    public void actualizarMediciones(@RequestParam(value = "fecha") String fecha) throws ParseException {
+        //medicionService.deleteAllMediciones();
         List<Region> regiones = regionService.findAll();
         LocalDate today = LocalDate.now();
         Date formattedNewDate = new SimpleDateFormat("yyyy-MM-dd").parse(fecha);
@@ -49,24 +53,27 @@ public class MedicionController {
         for (int i = 0; i < regiones.size(); i++) {
             int j = 0;
             while (!(today.minusDays(j).equals(fechaParametro.minusDays(1)))) {
+
                 ZoneId zoneId = ZoneId.systemDefault();
                 Date date = Date.from((today.minusDays(j)).atStartOfDay(zoneId).toInstant());
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                String formattedDate = today.minusDays(j).format(formatter);
-                List<HashMap<?, ?>> mediciones = cammesaService.demandaYTempertauraRegionPorFecha(formattedDate, (regiones.get(i)).getId());
-                HashMap<String, Double> medicion = medicionService.sumarDemandayTemperaturaTotal(mediciones, formattedDate, (regiones.get(i)).getId());
-                Medicion newMedicion = medicionService.createMedicion(new MedicionDTO(date, regiones.get(i), medicion.get("demanda"), medicion.get("temperatura")));
+                if (!medicionService.existeMedicion(date, Optional.ofNullable(regiones.get(i)))) {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    String formattedDate = today.minusDays(j).format(formatter);
+                    System.out.println("----> " + formattedDate + regiones.get(i).getId());
+                    List<HashMap<?, ?>> mediciones = cammesaService.demandaYTempertauraRegionPorFecha(formattedDate, (regiones.get(i)).getId());
+                    HashMap<String, Double> medicion = medicionService.sumarDemandayTemperaturaTotal(mediciones);
+                    Medicion newMedicion = medicionService.createMedicion(new MedicionDTO(date, regiones.get(i), medicion.get("demanda"), medicion.get("temperatura")));
+                    listaMediciones.add(newMedicion);
+                }
                 j++;
-                listaMediciones.add(newMedicion);
             }
-
 
         }
         medicionService.saveMediciones(listaMediciones);
-        return listaMediciones;
+
     }
 
-    @PostMapping("/cammesa/diaConMayorDemandaPorRegion")
+    @GetMapping("/cammesa/diaConMayorDemandaPorRegion")
     public List<Medicion> diaConMayorDemandaPorRegion() {
 
         return medicionService.dateWithMaxDemandByRegion();

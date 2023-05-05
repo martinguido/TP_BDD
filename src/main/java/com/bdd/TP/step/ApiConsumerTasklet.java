@@ -1,12 +1,6 @@
 package com.bdd.TP.step;
 
-import com.bdd.TP.dao.Medicion;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.batch.core.ExitStatus;
-import org.springframework.batch.core.StepContribution;
-import org.springframework.batch.core.StepExecution;
-import org.springframework.batch.core.StepExecutionListener;
+import org.springframework.batch.core.*;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
@@ -16,6 +10,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -37,22 +35,44 @@ public class ApiConsumerTasklet implements Tasklet, StepExecutionListener{
     }
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws IOException {
-        System.out.println("CHECKPOINT 1");
-//        String strDate = new SimpleDateFormat("yyyy-MM-dd").format(startDate);
-//        List<HashMap<?,?>> data = restTemplate
-//                .getForObject("https://api.cammesa.com/demanda-svc/demanda/ObtieneDemandaYTemperaturaRegionByFecha?fecha=2023-04-01&id_region=418", List.class);
-//        FileWriter fileWriter = new FileWriter(new File(  "/medicion.csv"));
-//        if (data!=null) {
-//            for (HashMap<?, ?> record : data) {
-//                String csvRecord = String.format("%s, %s, %s, %s\n", "418", record.get("fecha"), record.get("dem"), record.get("temp"));
-//                fileWriter.write(csvRecord);
-//            }
-//        }
-        FileWriter fileWriter = new FileWriter(new File(  "/app/src/main/resources/medicion.csv"));
-        fileWriter.write("HOLA");
-        fileWriter.close();
-//        System.out.println(data);
-        return RepeatStatus.FINISHED;
+        JobParameters jobParameters = chunkContext.getStepContext().getStepExecution().getJobParameters();
+        String contextDate = jobParameters.getString("startDate");
+        Long contextIdRegion = jobParameters.getLong("regionID");
+        String strRegion = contextIdRegion.toString();
+
+
+        try {
+            Instant instant = Instant.ofEpochMilli(Long.parseLong(contextDate));
+            LocalDate fechaActual = instant.atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate fechaLimite = fechaActual.plusMonths(1);
+            List<List<HashMap<?,?>>> dataToCSV2= new ArrayList<>();
+            while(fechaActual.isBefore(fechaLimite)){
+                Date date = Date.from(fechaActual.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                String strDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
+                System.out.println(strDate);
+                List<HashMap<?, ?>> data = restTemplate
+                        .getForObject("https://api.cammesa.com/demanda-svc/demanda/ObtieneDemandaYTemperaturaRegionByFecha?fecha=" + strDate + "&id_region=" + strRegion, List.class);
+                dataToCSV2.add(data);
+                fechaActual = fechaActual.plusDays(1);
+            }
+            System.out.println(dataToCSV2);
+            FileWriter fileWriter = new FileWriter(new File("medicion.csv"));
+            if (dataToCSV2 != null) {
+                for (List<HashMap<?,?>> lista1 :dataToCSV2){
+                    for (HashMap<?, ?> elemento : lista1) {
+                        String csvRecord = String.format("%s,%s,%s,%s\n", strRegion, elemento.get("fecha"), elemento.get("dem"), elemento.get("temp"));
+                        fileWriter.write(csvRecord);
+                    }
+                }
+            }
+            fileWriter.close();
+            System.out.println("TERMINO");
+            return RepeatStatus.FINISHED;
+        }
+        catch (Exception e){
+            System.out.println("FALLO");
+            return RepeatStatus.FINISHED;
+        }
     }
     @Override
     public ExitStatus afterStep(StepExecution stepExecution) {

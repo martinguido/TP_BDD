@@ -1,17 +1,11 @@
 package com.bdd.TP.dao;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name="REGIONES")
 public class Region {
-    /*@Id
-    @Column(name="MY_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long myId;*/
     @Id
     @Column(name="ID")
     private Integer id;
@@ -23,6 +17,9 @@ public class Region {
     private Integer idRge;
     @Column(name="NOMBRE")
     private String nombre;
+
+    @OneToMany(mappedBy = "region", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Medicion> mediciones;
     public Region() {
     }
     public Region(Integer id, Integer idElemento, Integer idPadre,Integer idRge, String nombre) {
@@ -32,12 +29,6 @@ public class Region {
         this.idRge = idRge;
         this.nombre = nombre;
     }
-    /*public Long getMyId() {
-        return myId;
-    }
-    public void setMyId(Long myId) {
-        this.myId = myId;
-    }*/
     public Integer getId() {
         return id;
     }

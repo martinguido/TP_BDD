@@ -13,23 +13,19 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
-
+@Configuration
 public class DataDownloader {
-
-
     public final JobBuilderFactory jobBuilderFactory;
-
     public final StepBuilderFactory stepBuilderFactory;
     private final RestTemplateBuilder restTemplateBuilder;
-
     public DataDownloader(JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory, RestTemplateBuilder rsb) {
         this.jobBuilderFactory = jobBuilderFactory;
         this.stepBuilderFactory = stepBuilderFactory;
         this.restTemplateBuilder = rsb;
     }
-
     @Bean
     public Job dataDownloaderJob(JobCompletionNotificationListener listener) {
         return jobBuilderFactory
@@ -39,7 +35,7 @@ public class DataDownloader {
                 .build();
     }
     @Bean
-    private Step apiConsumer() {
+    public Step apiConsumer() {
         return stepBuilderFactory.get("apiConsumer")
                 .tasklet(new ApiConsumerTasklet(restTemplateBuilder.build()))
                 .build();

@@ -1,5 +1,6 @@
 
 package com.bdd.TP.controller;
+import com.bdd.TP.job.DataDownloader;
 import com.bdd.TP.service.CammesaService;
 import javassist.Loader;
 import org.slf4j.Logger;
@@ -14,8 +15,10 @@ import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteExcep
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.data.jpa.repository.query.JpaParameters;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.crypto.Data;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -28,33 +31,38 @@ public class AsyncController {
     private final ConfigurableApplicationContext context;
     private static final Logger log = LoggerFactory.getLogger(AsyncController.class);
     private final JobLauncher jobLauncher;
+    private final Job dataDownloaderJob;
 
-    public AsyncController(ConfigurableApplicationContext context, JobLauncher jobLauncher) {
+    public AsyncController(ConfigurableApplicationContext context, JobLauncher jobLauncher, Job dataDownloaderJob) {
         this.context = context;
         this.jobLauncher= jobLauncher;
+        this. dataDownloaderJob = dataDownloaderJob;
     }
 
+
+
+
     @PostMapping("/cammesa/runBatch")
-    public String runBatch() throws Exception {
+    public String runBatch(@RequestParam("fecha") String fecha, @RequestParam("regionID") Integer regionID) throws Exception {
         log.info(String.valueOf(Thread.currentThread()));
         CompletableFuture.runAsync(() ->{
-            Job job = context.getBean("dataDownloaderJob", Job.class);
-            //JobLauncher jobLauncher = context.getBean(JobLauncher.class);
-            String sDate = "01/01/2023";
+//            String sDate = "01/01/2023";
             Date date = null;
+            long regionIDLong = Integer.valueOf(regionID).longValue();
+
             try{
-                date = new SimpleDateFormat("dd/MM/yyyy").parse(sDate);
+                date = new SimpleDateFormat("dd/MM/yyyy").parse(fecha);
 
             } catch (ParseException e){
                 throw new RuntimeException(e);
             }
             JobParameters jobParameters = new JobParametersBuilder()
                     .addDate("startDate",date)
-                    .addLong("regionID",418L)
+                    .addLong("regionID",regionIDLong)
                     .addLong("random", Instant.now().toEpochMilli())
                     .toJobParameters();
             try{
-                jobLauncher.run(job,jobParameters);
+                jobLauncher.run(dataDownloaderJob,jobParameters);
             } catch (JobExecutionAlreadyRunningException e) {
                 throw new RuntimeException(e);
             } catch(JobRestartException e){
@@ -64,8 +72,6 @@ public class AsyncController {
             } catch(JobParametersInvalidException e){
                 throw new RuntimeException(e);
             }
-
-
         });
         return "Something is running";
 

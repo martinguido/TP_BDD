@@ -1,6 +1,6 @@
 package com.bdd.TP.dao;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
@@ -9,7 +9,7 @@ import java.util.Objects;
 @Table(name="MEDICIONES")
 public class Medicion {
     @Id
-    @Column(name="ID")
+    @Column(name="MY_ID")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column(name="DEMANDA")
@@ -18,20 +18,11 @@ public class Medicion {
     private Double temperatura;
     @Column(name="FECHA")
     private Date fecha;
-//    referencedColumnName = "ID", table = "REGIONES"
     @ManyToOne(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
-    @JoinColumn(name="ID_REGION")
+    @JoinColumn(name="ID_REGION", referencedColumnName = "ID")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Region region;
-    public Double getTemperatura() {
-        return temperatura;
-    }
-    public void setTemperatura(Double temperatura) {
-        this.temperatura = temperatura;
-    }
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
-    }
+
     public Medicion(){}
     public Medicion(Double demanda, Double temperatura, Date fecha, Region region) {
         this.demanda = demanda;
@@ -39,24 +30,47 @@ public class Medicion {
         this.fecha = fecha;
         this.region = region;
     }
+
     public Long getId() {
         return id;
     }
-    public Date getFecha() {
-        return fecha;
+
+    public void setId(Long id) {
+        this.id = id;
     }
+
     public Double getDemanda() {
         return demanda;
     }
+
     public void setDemanda(Double demanda) {
         this.demanda = demanda;
     }
+
+    public Double getTemperatura() {
+        return temperatura;
+    }
+
+    public void setTemperatura(Double temperatura) {
+        this.temperatura = temperatura;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
     public Region getRegion() {
         return region;
     }
+
     public void setRegion(Region region) {
         this.region = region;
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -64,17 +78,20 @@ public class Medicion {
         Medicion medicion = (Medicion) o;
         return Objects.equals(demanda, medicion.demanda) && Objects.equals(temperatura, medicion.temperatura) && Objects.equals(fecha, medicion.fecha) && Objects.equals(region, medicion.region);
     }
+
     @Override
     public int hashCode() {
         return Objects.hash(demanda, temperatura, fecha, region);
     }
 
     @Override
-    public  String toString() {
+    public String toString() {
         return "Medicion{" +
-                "id='" + id + '\'' +
+                "id=" + id +
                 ", demanda=" + demanda +
+                ", temperatura=" + temperatura +
                 ", fecha=" + fecha +
+                ", region=" + region +
                 '}';
     }
 }

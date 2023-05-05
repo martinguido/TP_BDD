@@ -10,7 +10,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - persistedData:/app
+      - /Users/martinguido/Documents/TP:/app
     environment:
       SPRING_APPLICATION_JSON: '{
         "spring.jpa.database": "POSTGRESQL",
@@ -27,6 +27,9 @@ services:
         "spring.jpa.properties.hibernate.order_inserts":"true",
         "spring.jpa.properties.hibernate.generate_statistics":"false",
         "spring.batch.initialize-schema":"always",
+        "spring.task.execution.enabled":"false",
+        "spring.main.lazy-initialization":"true",
+        "spring.task.scheduling.enabled":"false",
         "spring.datasource.hikari.metrics.enabled":"false"
             }'
   postgres:
@@ -42,8 +45,8 @@ services:
       POSTGRES_DB: postgres
     ports:
       - 5432:5432
-#    volumes:
-#      - persistedData:/etc/data
+    volumes:
+      - persistedData:/etc/data
   pgadmin:
     container_name: pgadmin
     image: dpage/pgadmin4
@@ -54,8 +57,8 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: name@example.com
       PGADMIN_DEFAULT_PASSWORD: admin
-#    volumes:
-#      - persistedData:/etc/data
+    volumes:
+      - persistedData:/etc/data
     ports:
       - 80:80
 networks:
@@ -66,5 +69,7 @@ networks:
         - subnet: 192.168.55.0/24
           gateway: 192.168.55.1
 volumes:
+  persistance:
+    name: "persistance"
   persistedData:
-    name: "postgres-data"
+    name: "persistedData"
