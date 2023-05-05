@@ -8,6 +8,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -35,12 +37,32 @@ public class RegionController {
 //        return todasLasRegiones;
 //    }
 //    @PostConstruct
+    //@PostMapping("/cammesa/actualizarRegiones")
+    //public List actualizarRegiones() {
+      //  regionService.deleteAllRegions();
+        //List<Region> todasLasRegiones = cammesaService.actualizarRegiones();
+
+        //regionService.saveRegiones(todasLasRegiones);
+        //return todasLasRegiones;
+    //}
+
     @PostMapping("/cammesa/actualizarRegiones")
     public List actualizarRegiones() {
-        regionService.deleteAllRegions();
-        List<Region> todasLasRegiones = cammesaService.actualizarRegiones();
-        regionService.saveRegiones(todasLasRegiones);
-        return todasLasRegiones;
+        List<Region> regionesCammesa = cammesaService.actualizarRegiones();
+        List<Region> regiones = regionService.findAll();
+        System.out.println(regiones);
+        if (regiones.isEmpty()){
+            regionService.saveRegiones(regionesCammesa);
+        }
+        else {
+            for (Region region : regiones) {
+                if (!regionesCammesa.contains(region)) {
+                    regionService.deleteRegion(region); //se elimina de regiones y las mediciones de esa region
+                }
+            }
+        }
+        regionService.saveRegiones(regionesCammesa);
+        return regionesCammesa;
     }
     @DeleteMapping("/cammesa/borrarRegion")
     public ResponseEntity<?> deleteMapping(@RequestParam(value="id_region") Integer idRge){
