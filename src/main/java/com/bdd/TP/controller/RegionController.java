@@ -47,7 +47,7 @@ public class RegionController {
 //        regionService.deleteRegion(regionService.getElementByIdRge(idRge));
 //        return true;
         try {
-            regionService.deleteRegion(regionService.getByIdRge(idRge));
+            regionService.deleteRegion(regionService.getById(idRge));
             return ResponseEntity.ok("La region con idRge: "+idRge+" ha sido eliminada correctamente.");
         } catch (DataAccessException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La region con idRge: " + idRge + " no existe.");

@@ -20,7 +20,7 @@ public class MedicionService {
         this.medicionRepository = medicionRepository;
         this.regionRepository = regionRepository;
     }
-    public List<Medicion> findByFechaAndRegion(Date date, Optional<Region> region){return medicionRepository.findByFechaAndRegion(date,region);}
+    public Optional<Medicion> findByFechaAndRegion(Date date,Optional<Region> region){return medicionRepository.findByFechaAndRegion(date,region);}
     public Medicion createMedicion(MedicionDTO medicionDTO) {
         Region region = medicionDTO.getRegion();
         Integer idRge = region.getId();
@@ -34,7 +34,7 @@ public class MedicionService {
         return aNewMedicion;
     }
 
-    public HashMap<String, Double> sumarDemandayTemperaturaTotal(List<HashMap<?,?>> mediciones,String fecha, Integer idRge)
+    public HashMap<String, Double> sumarDemandayTemperaturaTotal(List<HashMap<?,?>> mediciones)
     {
 //
         HashMap<String , Double> medicionTotal= new HashMap<String, Double>();
@@ -54,6 +54,12 @@ public class MedicionService {
         return medicionTotal;
     }
 
+    public boolean existeMedicion(Date fecha, Optional<Region> region){
+        Optional<Medicion> medicion = medicionRepository.findByFechaAndRegion(fecha, region);
+        return medicion.isPresent();
+    }
+
+
     public List<Medicion> findByFecha(Date fecha){ return medicionRepository.findByFecha(fecha);}
 
     public double avgDemandaFechaEspecifica(Date fecha){
@@ -68,6 +74,10 @@ public class MedicionService {
 
     public void saveMediciones(List<Medicion> listaMediciones) {
         medicionRepository.saveAll(listaMediciones);
+    }
+
+    public void saveMedicion(Medicion medicion) {
+        medicionRepository.save(medicion);
     }
 
     public void deleteAllMediciones(){medicionRepository.deleteAllInBatch();}

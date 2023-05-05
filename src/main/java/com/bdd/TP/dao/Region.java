@@ -1,5 +1,7 @@
 package com.bdd.TP.dao;
 import jakarta.persistence.*;
+
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -20,6 +22,9 @@ public class Region {
     private Integer idRge;
     @Column(name="NOMBRE")
     private String nombre;
+
+    @OneToMany(mappedBy = "region", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Medicion> mediciones;
     public Region() {
     }
     public Region(Integer id, Integer idElemento, Integer idPadre,Integer idRge, String nombre) {

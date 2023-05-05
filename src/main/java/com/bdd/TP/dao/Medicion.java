@@ -10,8 +10,8 @@ import java.util.Objects;
 public class Medicion {
     @Id
     @Column(name="MY_ID")
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     @Column(name="DEMANDA")
     private Double demanda;
     @Column(name="TEMPERATURA")
@@ -19,7 +19,7 @@ public class Medicion {
     @Column(name="FECHA")
     private Date fecha;
     @ManyToOne(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
-    @JoinColumn(name="ID")
+    @JoinColumn(name="ID_REGION", referencedColumnName = "ID")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Region region;
     public Double getTemperatura() {
@@ -38,7 +38,7 @@ public class Medicion {
         this.fecha = fecha;
         this.region = region;
     }
-    public String getId() {
+    public Long getId() {
         return id;
     }
     public Date getFecha() {

@@ -32,6 +32,10 @@ public class RegionService {
     public Region getByIdRge(Integer idRge){
         return  regionRepository.getByIdRge(idRge);
     }
+
+    public Region getById(Integer id){
+        return  regionRepository.getById(id);}
+
     public void saveRegiones(List<Region> todasLasRegiones) {
         regionRepository.saveAll(todasLasRegiones);
     }
