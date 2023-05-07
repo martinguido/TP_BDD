@@ -10,7 +10,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - /Users/martinguido/Documents/TP:/app
+      - C:\Users\user\Downloads\TP_BDD:/app
     environment:
       SPRING_APPLICATION_JSON: '{
         "spring.jpa.database": "POSTGRESQL",
@@ -27,14 +27,12 @@ services:
         "spring.jpa.properties.hibernate.order_inserts":"true",
         "spring.jpa.properties.hibernate.generate_statistics":"false",
         "spring.batch.initialize-schema":"always",
-        "spring.task.execution.enabled":"false",
-        "spring.main.lazy-initialization":"true",
-        "spring.task.scheduling.enabled":"false",
+
         "spring.datasource.hikari.metrics.enabled":"false"
             }'
   postgres:
     container_name: postgres
-    image: postgres
+    image: postgres:latest
     restart: always
     networks:
       hfnet:
@@ -45,8 +43,6 @@ services:
       POSTGRES_DB: postgres
     ports:
       - 5432:5432
-    volumes:
-      - persistedData:/etc/data
   pgadmin:
     container_name: pgadmin
     image: dpage/pgadmin4
@@ -69,7 +65,5 @@ networks:
         - subnet: 192.168.55.0/24
           gateway: 192.168.55.1
 volumes:
-  persistance:
-    name: "persistance"
   persistedData:
     name: "persistedData"

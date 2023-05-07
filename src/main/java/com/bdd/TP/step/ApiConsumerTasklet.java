@@ -38,10 +38,10 @@ public class ApiConsumerTasklet implements Tasklet, StepExecutionListener{
         JobParameters jobParameters = chunkContext.getStepContext().getStepExecution().getJobParameters();
         String contextDate = jobParameters.getString("startDate");
         Long contextIdRegion = jobParameters.getLong("regionID");
-        String strRegion = contextIdRegion.toString();
 
 
         try {
+            String strRegion = contextIdRegion.toString();
             Instant instant = Instant.ofEpochMilli(Long.parseLong(contextDate));
             LocalDate fechaActual = instant.atZone(ZoneId.systemDefault()).toLocalDate();
             LocalDate fechaLimite = fechaActual.plusMonths(1);
