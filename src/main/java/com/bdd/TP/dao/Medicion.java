@@ -18,7 +18,7 @@ public class Medicion {
     private Double temperatura;
     @Column(name="FECHA")
     private Date fecha;
-    @ManyToOne(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY,  cascade = CascadeType.PERSIST)
     @JoinColumn(name="ID_REGION", referencedColumnName = "ID")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Region region;

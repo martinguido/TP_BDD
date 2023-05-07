@@ -3,6 +3,7 @@ import jakarta.persistence.*;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name="REGIONES")
@@ -23,8 +24,8 @@ public class Region {
     @Column(name="NOMBRE")
     private String nombre;
 
-    @OneToMany(mappedBy = "region", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Medicion> mediciones;
+    @OneToMany(mappedBy = "region", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<Medicion> mediciones;
     public Region() {
     }
     public Region(Integer id, Integer idElemento, Integer idPadre,Integer idRge, String nombre) {
@@ -70,6 +71,11 @@ public class Region {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+    public Set<Medicion> getMediciones() {
+        return mediciones;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
