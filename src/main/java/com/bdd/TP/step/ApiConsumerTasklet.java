@@ -60,6 +60,7 @@ public class ApiConsumerTasklet implements Tasklet, StepExecutionListener{
             if (dataToCSV2 != null) {
                 for (List<HashMap<?,?>> lista1 :dataToCSV2){
                     for (HashMap<?, ?> elemento : lista1) {
+                        //String formattedDate = new SimpleDateFormat("yyyy/MM/dd").format(elemento.get("fecha"));
                         String csvRecord = String.format("%s,%s,%s,%s\n", strRegion, elemento.get("fecha"), elemento.get("dem"), elemento.get("temp"));
                         fileWriter.write(csvRecord);
                     }

@@ -26,7 +26,7 @@ public class CSVFileReaderTasklet implements Tasklet, StepExecutionListener {
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws IOException {
 
-        String csvFile = "C:/Users/user/Downloads/TP_BDD/med.txt";
+        String csvFile = "medicion.csv";
 
         BufferedReader br = null;
         try {

@@ -2,11 +2,7 @@ package com.bdd.TP.job;
 
 import com.bdd.TP.dao.DemandaYTemperatura;
 import com.bdd.TP.listener.JobCompletionNotificationListener;
-import com.bdd.TP.service.CammesaService;
 import com.bdd.TP.step.ApiConsumerTasklet;
-import com.bdd.TP.step.CSVFileReaderTasklet;
-import com.bdd.TP.step.DyTDataReader;
-import com.bdd.TP.step.DyTDataWriter;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -21,14 +17,10 @@ import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.Resource;
 import javax.sql.DataSource;
 @Configuration
 @EnableBatchProcessing
@@ -37,8 +29,6 @@ public class DataDownloader {
     public final StepBuilderFactory stepBuilderFactory;
     private final RestTemplateBuilder restTemplateBuilder;
     private DataSource dataSource;
-    //@Value("#{jobParameters['inputFile']}")
-    //private String inputFile;
 
     public DataDownloader(JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory, RestTemplateBuilder rsb) {
         this.jobBuilderFactory = jobBuilderFactory;
@@ -96,33 +86,10 @@ public class DataDownloader {
     public JdbcBatchItemWriter<DemandaYTemperatura> databaseWriter(DataSource dataSource) {
         JdbcBatchItemWriter<DemandaYTemperatura> writer = new JdbcBatchItemWriter<>();
         writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
-        writer.setSql("INSERT INTO demanda_y_temperatura_data (region_id, fecha, demanda, temperatura) VALUES (:region_id, :fecha, :demanda, :temperatura)");
+        writer.setSql("INSERT INTO demanda_y_temperatura_data (id, region_id, fecha, demanda, temperatura) VALUES (:id, :region_id, :fecha, :demanda, :temperatura)");
         writer.setDataSource(dataSource);
         return writer;
     }
-
-
-
-    /*@Bean
-    public Step CSVFileReader() {
-        return stepBuilderFactory.get("CSVFileReader")
-                .<DemandaYTemperatura, DemandaYTemperatura>chunk(10)
-                //.tasklet(new CSVFileReaderTasklet())
-                .reader(new DyTDataReader(csvFilePath))
-                .writer(new DyTDataWriter(dataSource))
-                .allowStartIfComplete(true)
-                .build();
-    }
-
-    @Bean
-    public DyTDataReader dytDataReader() {
-        return new DyTDataReader(csvFilePath);
-    }
-
-    @Bean
-    public DyTDataWriter dytDataWriter() {
-        return new DyTDataWriter(dataSource);
-    }*/
 
 
 }

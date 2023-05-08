@@ -1,5 +1,5 @@
 package com.bdd.TP.step;
-
+/*
 import com.bdd.TP.dao.DemandaYTemperatura;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
@@ -42,4 +42,4 @@ public class DyTDataReader implements ItemReader<DemandaYTemperatura> {
         return DyTData;
     }
 
-}
+}*/
