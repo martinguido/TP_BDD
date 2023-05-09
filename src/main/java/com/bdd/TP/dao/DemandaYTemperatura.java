@@ -14,41 +14,41 @@ public class DemandaYTemperatura {
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
 
-        @Column(name="REGION_ID")
-        private Integer region_id;
+        @Column(name="REGION")
+        private Integer region;
 
         @Column(name="FECHA")
         private Date fecha;
 
         @Column(name="DEMANDA")
-        private Integer demanda;
+        private String demanda;
 
         @Column(name="TEMPERATURA")
         private String temperatura;
 
         public DemandaYTemperatura() {
         }
-        public DemandaYTemperatura(Integer region_id, Date fecha, Integer demanda, String temperatura) {
-            this.region_id = region_id;
+        public DemandaYTemperatura(Integer region, Date fecha, String demanda, String temperatura) {
+            this.region = region;
             this.fecha = fecha;
             this.demanda = demanda;
             this.temperatura = temperatura;
         }
 
-        public Long getId() {
-            return id;
-        }
+        public Long getId() {return id;}
         public void setId(Long id) {
         this.id = id;
     }
-        public Integer getRegionId() {
-            return region_id;
+        public Integer getRegion() {
+            return region;
         }
-        public void setRegionId(Integer region_id) {this.region_id = region_id;}
-        public Integer getDemanda() {
+        public void setRegion(String id_region) throws Exception {
+            this.region = Integer.parseInt(id_region);
+        }
+        public String getDemanda() {
             return demanda;
         }
-        public void setDemanda(Integer demanda) {
+        public void setDemanda(String demanda) {
             this.demanda = demanda;
         }
         public String getTemperatura() {
@@ -69,16 +69,16 @@ public class DemandaYTemperatura {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             DemandaYTemperatura dyt = (DemandaYTemperatura) o;
-            return Objects.equals(region_id, dyt.region_id) && Objects.equals(fecha, dyt.fecha) && Objects.equals(demanda, dyt.demanda) && Objects.equals(temperatura, dyt.temperatura);
+            return Objects.equals(region, dyt.region) && Objects.equals(fecha, dyt.fecha) && Objects.equals(demanda, dyt.demanda) && Objects.equals(temperatura, dyt.temperatura);
         }
         @Override
         public int hashCode() {
-            return Objects.hash(region_id, fecha, demanda, temperatura);
+            return Objects.hash(region, fecha, demanda, temperatura);
         }
         @Override
         public String toString() {
             return "DemandaYTemperatura{" +
-                    ", region_id=" + region_id +
+                    ", region=" + region +
                     ", fecha=" + fecha +
                     ", demanda=" + demanda +
                     ", temperatura='" + temperatura + '\'' +

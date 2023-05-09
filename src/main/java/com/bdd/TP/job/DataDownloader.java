@@ -62,6 +62,7 @@ public class DataDownloader {
                 .<DemandaYTemperatura, DemandaYTemperatura>chunk(10)
                 .reader(csvFileReader)
                 .writer(databaseWriter)
+                .allowStartIfComplete(true)
                 .build();
     }
 
@@ -73,7 +74,7 @@ public class DataDownloader {
         reader.setResource(new org.springframework.core.io.FileSystemResource("medicion.csv"));
         reader.setLineMapper(new DefaultLineMapper<DemandaYTemperatura>() {{
             setLineTokenizer(new DelimitedLineTokenizer() {{
-                setNames(new String[]{"region_id", "fecha", "demanda","temperatura"});
+                setNames(new String[]{"region", "fecha", "demanda","temperatura"});
             }});
             setFieldSetMapper(new BeanWrapperFieldSetMapper<DemandaYTemperatura>() {{
                 setTargetType(DemandaYTemperatura.class);
@@ -86,7 +87,7 @@ public class DataDownloader {
     public JdbcBatchItemWriter<DemandaYTemperatura> databaseWriter(DataSource dataSource) {
         JdbcBatchItemWriter<DemandaYTemperatura> writer = new JdbcBatchItemWriter<>();
         writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
-        writer.setSql("INSERT INTO demanda_y_temperatura_data (id, region_id, fecha, demanda, temperatura) VALUES (:id, :region_id, :fecha, :demanda, :temperatura)");
+        writer.setSql("INSERT INTO demanda_y_temperatura_data (region, fecha, demanda, temperatura) VALUES (:region, to_timestamp(:fecha, 'YYYY-MM-DD\"T\"HH24:MI:SS.US\"Z\"'), :demanda, :temperatura)");
         writer.setDataSource(dataSource);
         return writer;
     }
