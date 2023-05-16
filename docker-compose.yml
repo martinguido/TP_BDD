@@ -10,7 +10,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - C:\Users\user\Downloads\TP_BDD:/app
+      - /Users/carlabaccari/TP_BDD:/app
     environment:
       SPRING_APPLICATION_JSON: '{
         "spring.jpa.database": "POSTGRESQL",

@@ -10,7 +10,7 @@ import java.util.Objects;
 public class Medicion {
     @Id
     @Column(name="MY_ID")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name="DEMANDA")
     private Double demanda;
@@ -18,7 +18,7 @@ public class Medicion {
     private Double temperatura;
     @Column(name="FECHA")
     private Date fecha;
-    @ManyToOne(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY,  cascade = CascadeType.PERSIST)
     @JoinColumn(name="ID_REGION", referencedColumnName = "ID")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Region region;

@@ -36,7 +36,7 @@ public class AsyncController {
     public AsyncController(ConfigurableApplicationContext context, JobLauncher jobLauncher, Job dataDownloaderJob) {
         this.context = context;
         this.jobLauncher= jobLauncher;
-        this. dataDownloaderJob = dataDownloaderJob;
+        this.dataDownloaderJob = dataDownloaderJob;
     }
 
 
@@ -46,30 +46,31 @@ public class AsyncController {
     public String runBatch(@RequestParam("fecha") String fecha, @RequestParam("regionID") Integer regionID) throws Exception {
         log.info(String.valueOf(Thread.currentThread()));
         CompletableFuture.runAsync(() ->{
+
 //            String sDate = "01/01/2023";
             Date date = null;
             long regionIDLong = Integer.valueOf(regionID).longValue();
 
             try{
-                date = new SimpleDateFormat("dd/MM/yyyy").parse(fecha);
+
+                date = new SimpleDateFormat("yyyy-MM-dd").parse(fecha);
 
             } catch (ParseException e){
                 throw new RuntimeException(e);
             }
+
             JobParameters jobParameters = new JobParametersBuilder()
                     .addDate("startDate",date)
                     .addLong("regionID",regionIDLong)
                     .addLong("random", Instant.now().toEpochMilli())
                     .toJobParameters();
+
             try{
+
                 jobLauncher.run(dataDownloaderJob,jobParameters);
-            } catch (JobExecutionAlreadyRunningException e) {
-                throw new RuntimeException(e);
-            } catch(JobRestartException e){
-                throw new RuntimeException(e);
-            } catch(JobInstanceAlreadyCompleteException e){
-                throw new RuntimeException(e);
-            } catch(JobParametersInvalidException e){
+
+            } catch (JobExecutionAlreadyRunningException | JobParametersInvalidException |
+                     JobInstanceAlreadyCompleteException | JobRestartException e) {
                 throw new RuntimeException(e);
             }
         });
