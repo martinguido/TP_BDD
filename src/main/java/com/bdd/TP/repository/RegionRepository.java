@@ -9,11 +9,8 @@ import java.util.Optional;
 @Repository
 public interface RegionRepository extends CrudRepository<Region, Long> {
      Region getByIdRge(Integer id);
-
      Region getById(Integer id);
      void deleteAllInBatch();
      List<Region> findAll();
-     Optional<Region> findByIdRge(Integer idRge);
-
      Optional<Region> findById(Integer id);
 }

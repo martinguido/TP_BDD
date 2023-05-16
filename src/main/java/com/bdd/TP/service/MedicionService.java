@@ -20,7 +20,6 @@ public class MedicionService {
         this.medicionRepository = medicionRepository;
         this.regionRepository = regionRepository;
     }
-    public Optional<Medicion> findByFechaAndRegion(Date date,Optional<Region> region){return medicionRepository.findByFechaAndRegion(date,region);}
     public Medicion createMedicion(MedicionDTO medicionDTO) {
         Region region = medicionDTO.getRegion();
         Integer idRge = region.getId();
@@ -30,13 +29,10 @@ public class MedicionService {
                 );
         medicionDTO.setRegion(savedRegion);
         Medicion aNewMedicion = new Medicion(medicionDTO.getDemanda(),medicionDTO.getTemperatura(), medicionDTO.getFecha(), medicionDTO.getRegion());
-        //medicionRepository.save(aNewMedicion);
         return aNewMedicion;
     }
-
     public HashMap<String, Double> sumarDemandayTemperaturaTotal(List<HashMap<?,?>> mediciones)
     {
-//
         HashMap<String , Double> medicionTotal= new HashMap<String, Double>();
         double demanda = 0.0;
         double temperatura = 0.0;
@@ -58,27 +54,19 @@ public class MedicionService {
         Optional<Medicion> medicion = medicionRepository.findByFechaAndRegion(fecha, region);
         return medicion.isPresent();
     }
-
-
-    public List<Medicion> findByFecha(Date fecha){ return medicionRepository.findByFecha(fecha);}
-
     public double avgDemandaFechaEspecifica(Date fecha){
         double demandaEsteDia = medicionRepository.findSomeDateAvgDemand(fecha);
         return  demandaEsteDia;
     }
-
     public List<Medicion> dateWithMaxDemandByRegion() {
         return medicionRepository.dateWithMaxDemandByRegion();
-
     }
-
     public void saveMediciones(List<Medicion> listaMediciones) {
         medicionRepository.saveAll(listaMediciones);
     }
-
     public void saveMedicion(Medicion medicion) {
         medicionRepository.save(medicion);
     }
 
-    public void deleteAllMediciones(){medicionRepository.deleteAllInBatch();}
+    public void deleteAll() {medicionRepository.deleteAll();}
 }

@@ -10,7 +10,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - /Users/carlabaccari/TP_BDD:/app
+      - /Users/martinguido/Documents/TP:/app
     environment:
       SPRING_APPLICATION_JSON: '{
         "spring.jpa.database": "POSTGRESQL",
@@ -27,7 +27,6 @@ services:
         "spring.jpa.properties.hibernate.order_inserts":"true",
         "spring.jpa.properties.hibernate.generate_statistics":"false",
         "spring.batch.initialize-schema":"always",
-
         "spring.datasource.hikari.metrics.enabled":"false"
             }'
   postgres:

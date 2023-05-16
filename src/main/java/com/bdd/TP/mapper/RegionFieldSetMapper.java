@@ -10,7 +10,6 @@ import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.FieldSet;
 
 public class RegionFieldSetMapper implements FieldSetMapper<Medicion> {
-
     private final RegionService regionService;
     private final MedicionService medicionService;
 
@@ -21,7 +20,6 @@ public class RegionFieldSetMapper implements FieldSetMapper<Medicion> {
 
     @Override
     public Medicion mapFieldSet(FieldSet fieldSet) {
-
         String temperaturaValue = fieldSet.readString("temperatura");
         Double temperatura;
         if (!temperaturaValue.equals("null")) {
@@ -29,18 +27,13 @@ public class RegionFieldSetMapper implements FieldSetMapper<Medicion> {
         } else {
             temperatura = null;
         }
-
         Medicion newMedicion = medicionService.createMedicion(new MedicionDTO(fieldSet.readDate("fecha", "yyyy-MM-dd'T'HH:mm:ss.SSSZ"), convertToRegion(fieldSet.readString("id_region")), fieldSet.readDouble("demanda"), temperatura));
         return newMedicion;
     }
 
     private Region convertToRegion(String id_region) {
-
         int idRge = Integer.parseInt(id_region);
         Region savedRegion = regionService.getById(idRge);
-
         return savedRegion;
     }
-
-
 }

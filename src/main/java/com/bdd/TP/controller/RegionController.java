@@ -18,22 +18,6 @@ public class RegionController {
         this.cammesaService = cammesaService;
         this.regionService = regionService;
     }
-
-//    @PostMapping("/region/")
-//    public RegionDTO createRegion(@RequestBody RegionDTO regionDTO) {
-//        return regionService.createRegion(regionDTO);
-//    }
-
-    //    @PostMapping("/cammesa/actualizarRegiones2")
-//    public List actualizarRegiones2() {
-//        List<HashMap<String, ?>> todasLasRegiones = cammesaService.actualizarRegiones2();
-//        for (int i = 0; i < todasLasRegiones.size(); i++) {
-//            regionService.createRegion(new RegionDTO((Integer) (todasLasRegiones.get(i)).get("id"),
-//                    (String) ((todasLasRegiones.get(i)).get("nombre"))));
-//        }
-//        return todasLasRegiones;
-//    }
-//    @PostConstruct
     @PostMapping("/cammesa/actualizarRegiones")
     public List actualizarRegiones() {
         regionService.deleteAllRegions();
@@ -43,8 +27,6 @@ public class RegionController {
     }
     @DeleteMapping("/cammesa/borrarRegion")
     public ResponseEntity<?> deleteMapping(@RequestParam(value="id_region") Integer idRge){
-//        regionService.deleteRegion(regionService.getElementByIdRge(idRge));
-//        return true;
         try {
             regionService.deleteRegion(regionService.getById(idRge));
             return ResponseEntity.ok("La region con idRge: "+idRge+" ha sido eliminada correctamente.");
