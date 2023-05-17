@@ -3,7 +3,6 @@ package com.bdd.TP.job;
 import com.bdd.TP.dao.Medicion;
 import com.bdd.TP.listener.JobCompletionNotificationListener;
 import com.bdd.TP.mapper.RegionFieldSetMapper;
-import com.bdd.TP.processor.MedicionItemProcessor;
 import com.bdd.TP.service.MedicionService;
 import com.bdd.TP.service.RegionService;
 import com.bdd.TP.step.ApiConsumerTasklet;
@@ -74,17 +73,12 @@ public class DataDownloader {
         return stepBuilderFactory.get("csvReaderStep")
                 .<Medicion, Medicion>chunk(10)
                 .reader(csvFileReader)
-                .processor(dataProcessor())
                 .writer(databaseWriter)
                 .allowStartIfComplete(true)
                 .build();
     }
 
 
-    @Bean
-    public ItemProcessor<Medicion, Medicion> dataProcessor() {
-        return new MedicionItemProcessor();
-    }
 
 
 

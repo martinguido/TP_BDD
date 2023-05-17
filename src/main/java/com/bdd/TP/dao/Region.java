@@ -2,6 +2,7 @@ package com.bdd.TP.dao;
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name="REGIONES")
@@ -19,7 +20,7 @@ public class Region {
     private String nombre;
 
     @OneToMany(mappedBy = "region", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Medicion> mediciones;
+    private Set<Medicion> mediciones;
     public Region() {
     }
     public Region(Integer id, Integer idElemento, Integer idPadre,Integer idRge, String nombre) {

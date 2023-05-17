@@ -30,16 +30,23 @@ public class MedicionController {
     @PostMapping("/cammesa/demandaYTemperaturaDiario")
     public String actualizarDemanda(@RequestParam(value = "fecha") String fecha, @RequestParam(value = "id_region") Integer id_region) throws ParseException {
         Date newDate = new SimpleDateFormat("yyyy-MM-dd").parse(fecha);
-        String response = "Already exists";
-        List<HashMap<?, ?>> mediciones = cammesaService.demandaYTempertauraRegionPorFecha(fecha, id_region); //Mediciones de la fecha y region
-        HashMap<String, Double> medicion = medicionService.sumarDemandayTemperaturaTotal(mediciones); //Medicion Total de una fecha y region
+        List<HashMap<?,?>> mediciones = cammesaService.demandaYTempertauraRegionPorFecha(fecha, id_region); //Mediciones de la fecha y region
         Region region = regionService.getById(id_region);
-        if (!medicionService.existeMedicion(newDate, Optional.ofNullable(region))) {
-            Medicion newMedicion = medicionService.createMedicion(new MedicionDTO(newDate, region, medicion.get("demanda"), medicion.get("temperatura")));
-            medicionService.saveMedicion(newMedicion);
-            response = "OK";
+        List<Medicion> listaMediciones = new ArrayList<>();
+        double dem = 0.0;
+        for (HashMap<?,?> medicion : mediciones) {
+            if (!medicionService.existeMedicion(newDate, Optional.ofNullable(region)))
+            {
+
+                Medicion newMedicion = medicionService.createMedicion(new MedicionDTO(newDate, region, dem + (Integer) medicion.get("dem"), (Double) medicion.get("temp")));
+                listaMediciones.add(newMedicion);
+
+            }
         }
-        return response;
+        medicionService.saveMediciones(listaMediciones);
+
+
+        return "Successfully saved";
     }
 
     @PostMapping("/cammesa/actualizarMediciones")
@@ -71,11 +78,23 @@ public class MedicionController {
         }
         medicionService.saveMediciones(listaMediciones);
 
+
     }
 
     @GetMapping("/cammesa/diaConMayorDemandaPorRegion")
-    public List<Medicion> diaConMayorDemandaPorRegion() {
+    public List<Map<String, Object>> diaConMayorDemandaPorRegion() {
+        List<Medicion> mediciones = medicionService.dateWithMaxDemandByRegion();
+        List<Map<String, Object>> results = new ArrayList<>();
+        for (Medicion medicion : mediciones) {
+            Map<String, Object> demandaByRegion = new HashMap<>();
+            demandaByRegion.put("Id Region", medicion.getRegion().getId());
+            demandaByRegion.put("Fecha", medicion.getFecha());
+            demandaByRegion.put("Demanda", medicion.getDemanda());
+            results.add(demandaByRegion);
+        }
 
-        return medicionService.dateWithMaxDemandByRegion();
+        return results;
     }
+
+
 }
