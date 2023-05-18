@@ -1,7 +1,5 @@
 package com.bdd.TP.dao;
 
-
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -11,10 +9,6 @@ import java.util.Objects;
 @Entity
 @Table(name="FERIADOS")
 public class Feriado {
-    //    @Id
-//    @Column(name="ID")
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
     @Id
     @Column(name="FECHA")
     private Date fecha;
@@ -32,9 +26,7 @@ public class Feriado {
     public void setEsFeriado(boolean esFeriado) {
         this.esFeriado = esFeriado;
     }
-    public Feriado() {
-
-    }
+    public Feriado() {}
     public Feriado(Date fecha, boolean esFeriado) {
         this.fecha = fecha;
         this.esFeriado = esFeriado;

@@ -1,7 +1,5 @@
 package com.bdd.TP.dto;
 
-import javax.persistence.Column;
-
 public class RegionDTO {
     private Integer id;
     private Integer idElemento;

@@ -3,7 +3,6 @@ package com.bdd.TP.mapper;
 import com.bdd.TP.dao.Medicion;
 import com.bdd.TP.dao.Region;
 import com.bdd.TP.dto.MedicionDTO;
-import com.bdd.TP.exceptions.RegionDoesNotExistException;
 import com.bdd.TP.service.MedicionService;
 import com.bdd.TP.service.RegionService;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;

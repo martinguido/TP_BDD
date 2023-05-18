@@ -6,6 +6,5 @@ import org.springframework.stereotype.Repository;
 import java.util.Date;
 @Repository
 public interface FeriadoRepository extends CrudRepository<Feriado, Date> {
-
     Feriado findFirstByFechaIsGreaterThanAndEsFeriadoIsTrue(Date fecha);
 }

@@ -9,7 +9,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableBatchProcessing
 @EnableAsync
 public class TpApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(TpApplication.class, args);
 	}

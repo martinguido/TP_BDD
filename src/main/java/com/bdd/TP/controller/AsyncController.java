@@ -1,7 +1,6 @@
 
 package com.bdd.TP.controller;
 
-import com.bdd.TP.dao.Region;
 import com.bdd.TP.service.CammesaService;
 import com.bdd.TP.service.MedicionService;
 import com.bdd.TP.service.RegionService;
@@ -21,11 +20,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
-@RequestMapping("api/v1")
+@RequestMapping("api")
 public class AsyncController {
     private final ConfigurableApplicationContext context;
     private static final Logger log = LoggerFactory.getLogger(AsyncController.class);
@@ -43,8 +41,8 @@ public class AsyncController {
         this.regionService = regionService;
         this.cammesaService = cammesaService;
     }
-    @PostMapping("/cammesa/runBatch")
-    public String runBatch(@RequestParam("fecha") String fecha, @RequestParam("regionID") Integer regionID) throws Exception {
+    @PostMapping("/demandaYTemperaturaMensual")
+    public String demandaYTemperaturaMensual(@RequestParam("fecha") String fecha, @RequestParam("regionID") Integer regionID) throws Exception {
         medicionService.deleteAll();
         regionService.deleteAllRegions();
         regionService.saveRegiones(cammesaService.actualizarRegiones());

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1")
+@RequestMapping("api")
 public class RegionController {
     private final CammesaService cammesaService;
     private final RegionService regionService;
@@ -18,14 +18,14 @@ public class RegionController {
         this.cammesaService = cammesaService;
         this.regionService = regionService;
     }
-    @PostMapping("/cammesa/actualizarRegiones")
+    @PostMapping("/actualizarRegiones")
     public List actualizarRegiones() {
         regionService.deleteAllRegions();
         List<Region> todasLasRegiones = cammesaService.actualizarRegiones();
         regionService.saveRegiones(todasLasRegiones);
         return todasLasRegiones;
     }
-    @DeleteMapping("/cammesa/borrarRegion")
+    @DeleteMapping("/borrarRegion")
     public ResponseEntity<?> deleteMapping(@RequestParam(value="id_region") Integer idRge){
         try {
             regionService.deleteRegion(regionService.getById(idRge));

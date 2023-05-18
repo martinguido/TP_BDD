@@ -30,7 +30,6 @@ public class Medicion {
         this.fecha = fecha;
         this.region = region;
     }
-
     public Long getId() {
         return id;
     }

@@ -5,7 +5,6 @@ import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.web.client.RestTemplate;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -38,8 +37,6 @@ public class ApiConsumerTasklet implements Tasklet, StepExecutionListener{
         JobParameters jobParameters = chunkContext.getStepContext().getStepExecution().getJobParameters();
         String contextDate = jobParameters.getString("startDate");
         Long contextIdRegion = jobParameters.getLong("regionID");
-
-
         try {
             String strRegion = contextIdRegion.toString();
             Instant instant = Instant.ofEpochMilli(Long.parseLong(contextDate));
@@ -60,7 +57,6 @@ public class ApiConsumerTasklet implements Tasklet, StepExecutionListener{
             if (dataToCSV2 != null) {
                 for (List<HashMap<?,?>> lista1 :dataToCSV2){
                     for (HashMap<?, ?> elemento : lista1) {
-                        //String formattedDate = new SimpleDateFormat("yyyy/MM/dd").format(elemento.get("fecha"));
                         String csvRecord = String.format("%s,%s,%s,%s\n", strRegion, elemento.get("fecha"), elemento.get("dem"), elemento.get("temp"));
                         fileWriter.write(csvRecord);
                     }

@@ -24,20 +24,20 @@ public class FeriadoController {
         this.feriadoService = feriadoService;
         this.medicionService = medicionService;
     }
+    @GetMapping("/esFeriado")
+    public String esFeriado(@RequestParam(value="fecha") String fecha){
+        return cammesaService.esFeriado(fecha);
+    }
 
-    @GetMapping("/cammesa/demandaFeriado")
+
+    @GetMapping("/demandaFeriado")
     public void demandaFeriado(@RequestParam(value="fecha") String fecha) throws ParseException {
         Date fechaFormatoDate = new SimpleDateFormat("yyyy-MM-dd").parse(fecha);
         Feriado primerFeriadoEncontrado = feriadoService.feriadoCercano(fechaFormatoDate);
         Date fechaHardcodeada = new SimpleDateFormat("yyyy-MM-dd").parse("2023-04-20");
         double avgDemanda = medicionService.avgDemandaFechaEspecifica(fechaHardcodeada);
-        System.out.println(fechaHardcodeada);
-        System.out.println("AVG DEMANDA: "+avgDemanda);
-        //List<Medicion> medicionesDeLaFecha = medicionService.findByFecha(fechaHardcodeada);
-        //System.out.println("MEDICIONES DE LA FECHA: "+medicionesDeLaFecha);
     }
-    //    @PostConstruct
-    @PostMapping("/cammesa/actualizarFeriados")
+    @PostMapping("/actualizarFeriados")
     public void actualizarFeriados(@RequestParam(value="fecha") String fecha) throws ParseException {
         Date date = new Date();
         Instant inst = date.toInstant();
@@ -51,15 +51,15 @@ public class FeriadoController {
             String newDatePlus = LocalDate.parse(fecha).plusDays(i).toString();
             formattedNewDate = (new SimpleDateFormat("yyyy-MM-dd").parse(newDatePlus)).toString();
             Feriado feriado = new Feriado(new SimpleDateFormat("yyyy-MM-dd").parse(newDatePlus), Boolean.parseBoolean(cammesaService.esFeriado(newDatePlus)));
-//            System.out.println(feriado);
-            //feriadoService.createFeriado(new FeriadoDTO(feriado.getFecha(), feriado.getEsFeriado()));
             i++;
             listaFeriados.add(feriado);
         }
-
-//        System.out.println("********************************");
-//        System.out.println(listaFeriados.toString());
         feriadoService.loadFeriados(listaFeriados);
     }
+    @GetMapping("/demandaFeriadoMasCercano")
+    public String demandaFeriadoMasCercano(@RequestParam(value="fecha") String fecha){
+        return cammesaService.demandaFeriadoMasCercano(fecha);
+    }
+
 
 }

@@ -12,7 +12,6 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
-import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
@@ -23,7 +22,6 @@ import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import javax.sql.DataSource;
 
 @Configuration
@@ -66,8 +64,6 @@ public class DataDownloader {
                 .build();
     }
 
-
-
     @Bean
     public Step csvReaderStep(ItemReader<Medicion> csvFileReader, ItemWriter<Medicion> databaseWriter) {
         return stepBuilderFactory.get("csvReaderStep")
@@ -78,11 +74,6 @@ public class DataDownloader {
                 .build();
     }
 
-
-
-
-
-
     @Bean
     @StepScope
     public FlatFileItemReader<Medicion> CSVFileReader() {
@@ -92,18 +83,8 @@ public class DataDownloader {
             setLineTokenizer(new DelimitedLineTokenizer() {{
                 setNames("id_region", "fecha", "demanda","temperatura");
             }});
-            //setFieldSetMapper(new BeanWrapperFieldSetMapper<Medicion>(){{
-              //  setTargetType(Medicion.class);
-                //setCustomEditors(Collections.singletonMap(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ"), true)));
-
             setFieldSetMapper(new RegionFieldSetMapper(regionService, medicionService));
             }});
-
-
-
-
-
-
         return reader;
     }
 
@@ -113,9 +94,6 @@ public class DataDownloader {
         writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
         writer.setSql("INSERT INTO mediciones (id_region, fecha, demanda, temperatura) VALUES (:region.id, :fecha, :demanda, :temperatura)");
         writer.setDataSource(dataSource);
-
         return writer;
     }
-
-
 }
