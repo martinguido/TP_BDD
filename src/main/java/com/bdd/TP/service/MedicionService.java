@@ -7,10 +7,10 @@ import com.bdd.TP.exceptions.RegionDoesNotExistException;
 import com.bdd.TP.repository.MedicionRepository;
 import com.bdd.TP.repository.RegionRepository;
 import org.springframework.stereotype.Service;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+
+import javax.xml.transform.Result;
+import java.sql.ResultSet;
+import java.util.*;
 
 @Service
 public class MedicionService {
@@ -58,7 +58,7 @@ public class MedicionService {
         double demandaEsteDia = medicionRepository.findSomeDateAvgDemand(fecha);
         return  demandaEsteDia;
     }
-    public List<Medicion> dateWithMaxDemandByRegion() {
+    public List<Object[]> dateWithMaxDemandByRegion() {
         return medicionRepository.dateWithMaxDemandByRegion();
     }
     public void saveMediciones(List<Medicion> listaMediciones) {

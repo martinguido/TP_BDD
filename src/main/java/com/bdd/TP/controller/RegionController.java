@@ -29,9 +29,9 @@ public class RegionController {
     public ResponseEntity<?> deleteMapping(@RequestParam(value="id_region") Integer idRge){
         try {
             regionService.deleteRegion(regionService.getById(idRge));
-            return ResponseEntity.ok("La region con idRge: "+idRge+" ha sido eliminada correctamente.");
+            return ResponseEntity.ok("La region con id: "+idRge+" ha sido eliminada correctamente.");
         } catch (DataAccessException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La region con idRge: " + idRge + " no existe.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La region con id: " + idRge + " no existe.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }

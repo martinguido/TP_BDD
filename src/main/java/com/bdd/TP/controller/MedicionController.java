@@ -6,6 +6,9 @@ import com.bdd.TP.service.CammesaService;
 import com.bdd.TP.service.MedicionService;
 import com.bdd.TP.service.RegionService;
 import org.springframework.web.bind.annotation.*;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -83,17 +86,25 @@ public class MedicionController {
 
     @GetMapping("/cammesa/diaConMayorDemandaPorRegion")
     public List<Map<String, Object>> diaConMayorDemandaPorRegion() {
-        List<Medicion> mediciones = medicionService.dateWithMaxDemandByRegion();
-        List<Map<String, Object>> results = new ArrayList<>();
-        for (Medicion medicion : mediciones) {
+        List<Object[]> results = medicionService.dateWithMaxDemandByRegion();
+
+
+        List<Map<String, Object>> demandaByRegionList = new ArrayList<>();
+
+        for (Object[] row : results) {
+            int idRegion = (int) row[0];
+            String fecha = row[1].toString();
+            double demanda = (double) row[2];
+
             Map<String, Object> demandaByRegion = new HashMap<>();
-            demandaByRegion.put("Id Region", medicion.getRegion().getId());
-            demandaByRegion.put("Fecha", medicion.getFecha());
-            demandaByRegion.put("Demanda", medicion.getDemanda());
-            results.add(demandaByRegion);
+            demandaByRegion.put("id_region", idRegion);
+            demandaByRegion.put("fecha", fecha);
+            demandaByRegion.put("demanda", demanda);
+
+            demandaByRegionList.add(demandaByRegion);
         }
 
-        return results;
+        return demandaByRegionList;
     }
 
 
