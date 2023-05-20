@@ -46,13 +46,11 @@ public class ApiConsumerTasklet implements Tasklet, StepExecutionListener{
             while(fechaActual.isBefore(fechaLimite)){
                 Date date = Date.from(fechaActual.atStartOfDay(ZoneId.systemDefault()).toInstant());
                 String strDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
-                System.out.println(strDate);
                 List<HashMap<?, ?>> data = restTemplate
                         .getForObject("https://api.cammesa.com/demanda-svc/demanda/ObtieneDemandaYTemperaturaRegionByFecha?fecha=" + strDate + "&id_region=" + strRegion, List.class);
                 dataToCSV2.add(data);
                 fechaActual = fechaActual.plusDays(1);
             }
-            System.out.println(dataToCSV2);
             FileWriter fileWriter = new FileWriter(new File("medicion.csv"));
             if (dataToCSV2 != null) {
                 for (List<HashMap<?,?>> lista1 :dataToCSV2){

@@ -13,7 +13,7 @@ import java.time.ZoneId;
 import java.util.*;
 
 @RestController
-@RequestMapping("api/v1")
+@RequestMapping("api")
 public class FeriadoController {
     private final CammesaService cammesaService;
     private final FeriadoService feriadoService;

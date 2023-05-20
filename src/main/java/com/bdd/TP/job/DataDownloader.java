@@ -3,6 +3,7 @@ package com.bdd.TP.job;
 import com.bdd.TP.dao.Medicion;
 import com.bdd.TP.listener.JobCompletionNotificationListener;
 import com.bdd.TP.mapper.RegionFieldSetMapper;
+import com.bdd.TP.processor.MedicionItemProcessor;
 import com.bdd.TP.service.MedicionService;
 import com.bdd.TP.service.RegionService;
 import com.bdd.TP.step.ApiConsumerTasklet;
@@ -12,6 +13,7 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
@@ -22,6 +24,7 @@ import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import javax.sql.DataSource;
 
 @Configuration
@@ -64,15 +67,25 @@ public class DataDownloader {
                 .build();
     }
 
+
+
     @Bean
     public Step csvReaderStep(ItemReader<Medicion> csvFileReader, ItemWriter<Medicion> databaseWriter) {
         return stepBuilderFactory.get("csvReaderStep")
                 .<Medicion, Medicion>chunk(10)
                 .reader(csvFileReader)
+                .processor(dataProcessor())
                 .writer(databaseWriter)
                 .allowStartIfComplete(true)
                 .build();
     }
+    @Bean
+    public ItemProcessor<Medicion, Medicion> dataProcessor() {
+        return new MedicionItemProcessor();
+    }
+
+
+
 
     @Bean
     @StepScope
@@ -84,7 +97,8 @@ public class DataDownloader {
                 setNames("id_region", "fecha", "demanda","temperatura");
             }});
             setFieldSetMapper(new RegionFieldSetMapper(regionService, medicionService));
-            }});
+        }});
+
         return reader;
     }
 
@@ -94,6 +108,9 @@ public class DataDownloader {
         writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
         writer.setSql("INSERT INTO mediciones (id_region, fecha, demanda, temperatura) VALUES (:region.id, :fecha, :demanda, :temperatura)");
         writer.setDataSource(dataSource);
+
         return writer;
     }
+
+
 }
