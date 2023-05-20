@@ -1,6 +1,5 @@
 package com.bdd.TP.service;
 
-import com.bdd.TP.dao.Medicion;
 import com.bdd.TP.dao.Region;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
@@ -18,14 +17,7 @@ public class CammesaService {
                 .build()
                 .getForObject("https://api.cammesa.com/demanda-svc/demanda/EsDiaFeriado?fecha=" + fecha, String.class);
     }
-    public String demandaFeriadoMasCercano(String newDate) {
-        int i = 1;
-        while (Objects.equals(esFeriado(newDate), "false")) {
-            newDate = LocalDate.parse(newDate).plusDays(i).toString();
-            i = i + 1;
-        }
-        return newDate;
-    }
+
     public List<Region> actualizarRegiones() {
         List<Region> regionList = Arrays.stream(Objects.requireNonNull(restTemplateBuilder
                 .build()

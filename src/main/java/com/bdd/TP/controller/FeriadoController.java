@@ -30,12 +30,13 @@ public class FeriadoController {
     }
 
 
-    @GetMapping("/demandaFeriado")
-    public void demandaFeriado(@RequestParam(value="fecha") String fecha) throws ParseException {
+    @GetMapping("/demandaFeriadoMasCercano")
+    public double demandaFeriado(@RequestParam(value="fecha") String fecha) throws ParseException {
         Date fechaFormatoDate = new SimpleDateFormat("yyyy-MM-dd").parse(fecha);
         Feriado primerFeriadoEncontrado = feriadoService.feriadoCercano(fechaFormatoDate);
-        Date fechaHardcodeada = new SimpleDateFormat("yyyy-MM-dd").parse("2023-04-20");
-        double avgDemanda = medicionService.avgDemandaFechaEspecifica(fechaHardcodeada);
+        Date fechaABuscar = new SimpleDateFormat("yyyy-MM-dd").parse((primerFeriadoEncontrado.getFecha()).toString());
+        double avgDemanda = medicionService.avgDemandaFechaEspecifica(fechaABuscar);
+        return avgDemanda;
     }
     @PostMapping("/actualizarFeriados")
     public void actualizarFeriados(@RequestParam(value="fecha") String fecha) throws ParseException {
@@ -56,10 +57,4 @@ public class FeriadoController {
         }
         feriadoService.loadFeriados(listaFeriados);
     }
-    @GetMapping("/demandaFeriadoMasCercano")
-    public String demandaFeriadoMasCercano(@RequestParam(value="fecha") String fecha){
-        return cammesaService.demandaFeriadoMasCercano(fecha);
-    }
-
-
 }
