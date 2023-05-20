@@ -1,61 +1,83 @@
 package com.bdd.TP.dao;
 
-import jakarta.persistence.*;
-
+import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
+
 @Entity
 @Table(name="REGIONES")
 public class Region {
-//    @Id
-//    @Column(name="ID")
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
     @Id
-    @Column(name="ID_REGION")
-    private Integer id_region;
-    @Column(name="NOMBRE_REGION")
+    @Column(name="ID")
+    private Integer id;
+    @Column(name="ID_ELEMENTO")
+    private Integer idElemento;
+    @Column(name="ID_PADRE")
+    private Integer idPadre;
+    @Column(name="ID_RGE")
+    private Integer idRge;
+    @Column(name="NOMBRE")
     private String nombre;
 
-    public Integer getId_region() {
-        return id_region;
+    @OneToMany(mappedBy = "region", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Medicion> mediciones;
+    public Region() {
     }
-
-    public void setId_region(Integer id_region) {
-        this.id_region = id_region;
+    public Region(Integer id, Integer idElemento, Integer idPadre,Integer idRge, String nombre) {
+        this.id = id;
+        this.idElemento = idElemento;
+        this.idPadre = idPadre;
+        this.idRge = idRge;
+        this.nombre = nombre;
     }
-
+    public Integer getId() {
+        return id;
+    }
+    public void setId(Integer id) {
+        this.id = id;
+    }
+    public Integer getIdElemento() {
+        return idElemento;
+    }
+    public void setIdElemento(Integer idElemento) {
+        this.idElemento = idElemento;
+    }
+    public Integer getIdPadre() {
+        return idPadre;
+    }
+    public void setIdPadre(Integer idPadre) {
+        this.idPadre = idPadre;
+    }
+    public Integer getIdRge() {
+        return idRge;
+    }
+    public void setIdRge(Integer idRge) {
+        this.idRge = idRge;
+    }
     public String getNombre() {
         return nombre;
     }
-
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    public Region() {
-
-    }
-    public Region(Integer id_region, String nombre) {
-        this.id_region = id_region;
-        this.nombre = nombre;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Region region = (Region) o;
-        return Objects.equals(id_region, region.id_region) && Objects.equals(nombre, region.nombre);
+        return Objects.equals(id, region.id) && Objects.equals(idElemento, region.idElemento) && Objects.equals(idPadre, region.idPadre) && Objects.equals(idRge, region.idRge) && Objects.equals(nombre, region.nombre);
     }
-
     @Override
     public int hashCode() {
-        return Objects.hash(id_region);
+        return Objects.hash(id, idElemento, idPadre, idRge, nombre);
     }
-
     @Override
     public String toString() {
         return "Region{" +
-                "id_region=" + id_region +
+                ", id=" + id +
+                ", idElemento=" + idElemento +
+                ", idPadre=" + idPadre +
+                ", idRge=" + idRge +
                 ", nombre='" + nombre + '\'' +
                 '}';
     }
